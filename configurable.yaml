@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      python: app
+  template:
+    metadata:
+      labels:
+        python: app
+    spec:
+      containers:
+      - name: python-demo
+        image: fabianburth/python-configurable:latest
+        env:
+          - name: CPU_LOAD
+            value: "0.8"
+          - name: FREQUENCY
+            value: "2"
+        command: ["python3"]
+        args: ["app_configurable.py", "$(CPU_LOAD)", "$(FREQUENCY)"]
