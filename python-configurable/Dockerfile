@@ -12,4 +12,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD [ "python3", "app_configurable.py", "1.0", "2"]
+CMD [ "python3", "app_configurable.py", "1.0", "2", "2"]
