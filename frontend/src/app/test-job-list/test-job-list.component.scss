@@ -1,0 +1,21 @@
+.tableContainer {
+  width: 100%;
+  padding-top: 2rem;
+
+  .mat-row .mat-cell {
+    cursor: pointer;
+  }
+
+  .mat-row:hover .mat-cell {
+    background-color: #8DAFCE;
+  }
+
+  & table {
+    width: 100%;
+
+    .status {
+      display: flex;
+    }
+  }
+}
+

@@ -1,0 +1,26 @@
+<button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<div class="detailsContainer row">
+  <div class="configContainer col">
+    <h2>Configuration</h2>
+    <div>{{ testJob | json}}</div>
+  </div>
+  <div class="resultChartContainer col">´
+    <h2>Result</h2>
+    <div style="display: block;">
+      <canvas baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+      </canvas>
+    </div>
+
+  </div>
+</div>
+
+
+

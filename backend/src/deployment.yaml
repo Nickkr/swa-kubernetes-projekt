@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      python: app
+  template:
+    metadata:
+      labels:
+        python: app
+    spec:
+      containers:
+      - name: python-demo
+        image: fabianburth/python-docker:latest

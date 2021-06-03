@@ -1,0 +1,99 @@
+<button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<div class="formContainer">
+  <!-- General test config form-->
+  <div class="generalConfigContainer">
+    <h2>General test configuration</h2>
+    <div class="column">
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter test name</mat-label>
+          <input matInput [formControl]="getControl('name')" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Duration of the test (in min)</mat-label>
+          <input type="number" matInput [formControl]="getControl('testConfig.testDuration')" required />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <h3>Load settings:</h3>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the amount of cores</mat-label>
+          <input
+            type="number"
+            maxlength="2"
+            matInput
+            [formControl]="getControl('testConfig.coreCount')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the cpu load factor</mat-label>
+          <input
+            type="number"
+            matInput
+            [formControl]="getControl('testConfig.cpuLoadFactor')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the frequency</mat-label>
+          <input
+            type="number"
+            matInput
+            [formControl]="getControl('testConfig.frequency')"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="cloudConfigContainer">
+    <h2>Cloud specific configuration</h2>
+    <div class="azureConfigContainer">
+      <h3>Azure</h3>
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the tenantId</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.0.tenantId')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the subscriptionId</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.0.subscriptionId')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the VMSize</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.0.vmSize')"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="awsConfigContainer">
+      <h3>AWS</h3>
+    </div>
+  </div>
+</div>
+<div>{{ testJobForm.value | json }}</div>
+<div class="actionContainer">
+  <button
+    mat-raised-button
+    class="startButton"
+    [disabled]="testJobForm.invalid"
+    color="primary"
+  >
+    Start test
+  </button>
+</div>

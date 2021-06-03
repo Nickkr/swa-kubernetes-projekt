@@ -1,0 +1,37 @@
+<button mat-raised-button routerLink="create" routerLinkActive="active" color="primary">
+    Create test run
+  </button>
+  <div class="tableContainer">
+    <h2>Test runs</h2>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="status">
+            <mat-icon> {{ getStatusIcon(element.status).iconName }}</mat-icon>
+            <p>({{ getStatusIcon(element.status).text }})</p>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Date/Time Column -->
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="status">
+            {{ element.time | date: 'short'}}
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClicked(row._id)"></tr>
+    </table>
+  </div>

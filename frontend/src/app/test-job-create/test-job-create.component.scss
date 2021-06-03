@@ -1,0 +1,31 @@
+.formContainer {
+    padding-top: 2rem;
+
+    .row {
+      display: flex;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mat-form-field {
+      width: 250px;
+    }
+
+    .cloudConfigContainer {
+      padding-top: 20px;
+    }
+
+  }
+
+  .startButton {
+    width: 250px;
+    height: 40px;
+  }
+
+  .actionContainer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }

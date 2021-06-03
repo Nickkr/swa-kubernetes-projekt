@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python: Aktuelle Datei",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/python-configurable/app_configurable.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Nest Framework",
+            "args": [
+                "${workspaceFolder}/backend/src/main.ts"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
+            "sourceMaps": true,
+            "envFile": "${workspaceFolder}/backend/.env",
+            "cwd": "${workspaceRoot}/backend",
+            "console": "integratedTerminal",
+            "protocol": "inspector"
+        }
+    ]
+}
