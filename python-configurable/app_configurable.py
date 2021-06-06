@@ -2,8 +2,17 @@ from concurrent.futures import process
 import sys
 import time
 from multiprocessing import Process
+from enum import Enum
+import math
+import numpy as np
+from numpy import core
+import random
 
-
+class TestVariant(Enum):
+    DEFINED_TIME = 0
+    DEFINED_LOAD = 1
+    
+    
 def endless_loop(cpu_load, frequency):
     sleep_duration = frequency * (1 - cpu_load)
     lastTime = time.perf_counter()
@@ -21,37 +30,61 @@ def endless_loop(cpu_load, frequency):
         # You can comment in the print statements for debugging purposes
         # In production, it will pollute your memory
 
-# Source:https://www.geeksforgeeks.org/python-program-for-sieve-of-eratosthenes/
-def sieve_of_eratosthenes(n):
-    prime = [True for i in range(n + 1)]
-    p = 2
-    while (p * p <= n):
-          
-        # If prime[p] is not changed, then it is a prime
-        if (prime[p] == True):
-              
-            # Update all multiples of p
-            for i in range(p * 2, n + 1, p):
-                prime[i] = False
-        p += 1
-    prime[0]= False
-    prime[1]= False
+def sqrt_sum(count):
+    y = 0
+    for i in range(count):
+        el = random.random()
+        y += math.sqrt(el)
+    return y
 
-cpu_load = float(sys.argv[1]) #e.g 0.8 (%)
-frequency = float(sys.argv[2]) #e.g 2 seconds
-cores = int(sys.argv[3])
+def process_defined_load(cores, elements):
+    start = time.time()
+    processes = list()
 
-processes = list()
-for index in range(cores):
-    x = Process(target=endless_loop, args=(cpu_load, frequency,))
-    #x = Process(target=SieveOfEratosthenes, args=( 1000000000,))
-    processes.append(x)
-    x.start()
+    arr = [(int)(elements/cores) for i in range(cores)]
 
-# Wait for threads to end
-for index in range(cores):
-    processes[index].join()
+    # MULTIPROCESSING ALTERNATIVE 1
+    # with Pool(processes=cores) as p:
+    #     print(p.map(sqrt_sum, arr))
+    # ENDALTERNATIVE
 
+    # MULTIPROCESSING ALTERNATIVE 2 
+    processes = list()
+    for index in range(cores):
+        x = Process(target=sqrt_sum, args=(arr[index],))
+        processes.append(x)
+        x.start()
+
+    # Wait for threads to end
+    for index in range(cores):
+        processes[index].join()
+    # ENDALTERNATIVE
+
+    seconds = time.time() - start    
+    print(f"Cores: {cores}; Elements: {elements}; Time:{ seconds}")
+    return seconds
+
+def process_defined_time(cores, cpu_load, frequency):
+    processes = list()
+    for index in range(cores):
+        x = Process(target=endless_loop, args=(cpu_load, frequency,))
+            #x = Process(target=SieveOfEratosthenes, args=( 1000000000,))
+        processes.append(x)
+        x.start()
+
+    # Wait for threads to end
+    for index in range(cores):
+        processes[index].join()
+
+def main(cpu_load, frequency, cores, test_variant):
+    if test_variant == TestVariant.DEFINED_TIME:
+        process_defined_time(cores, cpu_load, frequency)
+    elif test_variant == TestVariant.DEFINED_LOAD:
+        elements = 1000000000
+        process_defined_load(cores, elements)
+
+if __name__ == '__main__':
+    main(float(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3]), TestVariant(int(sys.argv[4])))
 
 
 
