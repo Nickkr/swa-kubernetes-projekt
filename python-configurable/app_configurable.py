@@ -13,13 +13,14 @@ class TestVariant(Enum):
     DEFINED_LOAD = 1
     
     
-def endless_loop(cpu_load, frequency):
+def endless_loop(cpu_load, frequency, target_time):
     sleep_duration = frequency * (1 - cpu_load)
     lastTime = time.perf_counter()
+    startTime = lastTime
 
     counter = 0
 
-    while True:
+    while time.perf_counter() - startTime < target_time:
         counter = counter + 1
         if time.perf_counter() - lastTime >= frequency:
             #print(lastTime-time.perf_counter(), " sleeping...")
@@ -64,11 +65,10 @@ def process_defined_load(cores, elements):
     print(f"Cores: {cores}; Elements: {elements}; Time:{ seconds}")
     return seconds
 
-def process_defined_time(cores, cpu_load, frequency):
+def process_defined_time(cores, cpu_load, frequency, target_time):
     processes = list()
     for index in range(cores):
-        x = Process(target=endless_loop, args=(cpu_load, frequency,))
-            #x = Process(target=SieveOfEratosthenes, args=( 1000000000,))
+        x = Process(target=endless_loop, args=(cpu_load, frequency, target_time,))
         processes.append(x)
         x.start()
 
@@ -76,15 +76,15 @@ def process_defined_time(cores, cpu_load, frequency):
     for index in range(cores):
         processes[index].join()
 
-def main(cpu_load, frequency, cores, test_variant):
+def main(cpu_load, frequency, cores, test_variant, target_time):
     if test_variant == TestVariant.DEFINED_TIME:
-        process_defined_time(cores, cpu_load, frequency)
+        process_defined_time(cores, cpu_load, frequency, target_time)
     elif test_variant == TestVariant.DEFINED_LOAD:
         elements = 1000000000
         process_defined_load(cores, elements)
 
 if __name__ == '__main__':
-    main(float(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3]), TestVariant(int(sys.argv[4])))
+    main(float(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3]), TestVariant(int(sys.argv[4])), int(sys.argv[5]))
 
 
 
