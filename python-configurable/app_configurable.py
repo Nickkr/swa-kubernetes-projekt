@@ -4,8 +4,6 @@ import time
 from multiprocessing import Process
 from enum import Enum
 import math
-#import numpy as np
-#from numpy import core
 import random
 
 class TestVariant(Enum):
