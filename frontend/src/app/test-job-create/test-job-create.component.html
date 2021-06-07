@@ -55,6 +55,15 @@
           <mat-hint>The cpu frequency</mat-hint>
           <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the number of nodes to create</mat-label>
+          <input type="number"
+            matInput [formControl]="getControl('testConfig.nodeCount')"
+            required
+          />
+          <mat-hint>The number of nodes for the kubernets cluster</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
+        </mat-form-field>
         <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
   </mat-step>
@@ -96,7 +105,31 @@
   </mat-step>
   <mat-step [stepControl]="testJobForm">
     <ng-template matStepLabel>AWS configuration</ng-template>
-    <div>
+    <div class="stepperContentContainer column">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter the profile name:</mat-label>
+            <input
+              matInput
+              [formControl]="getControl('cloudConfig.1.profile')"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Enter the VPC name:</mat-label>
+            <input
+              matInput
+              [formControl]="getControl('cloudConfig.1.vpcName')"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Choose the VM Size</mat-label>
+            <input
+              matInput
+              [formControl]="getControl('cloudConfig.1.instanceType')"
+              required
+            />
+          </mat-form-field>
+      </div>
       <div class="actionContainer">
         <button
           mat-raised-button
@@ -107,8 +140,6 @@
           Start test
         </button>
         </div>
-    </div>
   </mat-step>
 </mat-horizontal-stepper>
-</div>
 <div>{{ testJobForm.value | json }}</div>
