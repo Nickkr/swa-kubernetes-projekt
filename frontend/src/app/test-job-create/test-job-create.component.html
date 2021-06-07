@@ -46,6 +46,14 @@
             required
           />
         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the number of nodes to create</mat-label>
+          <input type="number"
+            matInput [formControl]="getControl('testConfig.nodeCount')"
+            required
+          />
+
+        </mat-form-field>
       </div>
     </div>
   </div>
@@ -83,6 +91,31 @@
     </div>
     <div class="awsConfigContainer">
       <h3>AWS</h3>
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the profile name:</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.profile')"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the VPC name:</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.vpcName')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Choose the VM Size</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.instanceType')"
+            required
+          />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </div>
