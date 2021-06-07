@@ -26,7 +26,7 @@ read -p "Create new resource group? (y/N) " decision
   fi
 
 # Erstellen eines AKS-Clusters
-az aks create --resource-group $RESOURCE_GROUP_NAME --name $CLUSTER_NAME --node-count $CLUSTER_NODES --enable-addons monitoring --generate-ssh-keys
+az aks create --resource-group $RESOURCE_GROUP_NAME --name $CLUSTER_NAME --node-count $CLUSTER_NODES --enable-addons monitoring --generate-ssh-keys --node-vm-size Standard_DS1_v2
 
 # Installation von kubectl
 read -p "Do you want to install kubectl? (y/N) " decision
@@ -35,13 +35,13 @@ read -p "Do you want to install kubectl? (y/N) " decision
   fi
 
 # Credentials für kubectl setzen.
-# az aks get-credentials --resource-group $RESOURCE_GROUP_NAME --name $CLUSTER_NAME
+az aks get-credentials --resource-group $RESOURCE_GROUP_NAME --name $CLUSTER_NAME
 
 # Deployment der in der kubernetes.yaml definierten Anwendung
-# kubectl apply -f kubernetes.yaml
+kubectl apply -f configurable.yaml
 
 #Überwachen des Deployments
-# kubectl get service azure-vote-front --watch
+kubectl get service app-demo --watch
 
 # Löschen des Clusters
 #az group delete --name $RESOURCE_GROUP_NAME --yes --no-wait
