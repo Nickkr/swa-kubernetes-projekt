@@ -10,6 +10,21 @@
       flex-direction: column;
     }
 
+    .stepperContentContainer {
+      border: 2px solid #212529;
+      border-radius: 10px;
+      padding: 1rem
+    }
+
+    .mat-form-field {
+      padding: 0.5rem;
+    }
+
+    .mat-stepper-next, .startTestButton {
+      width: 150px;
+      margin-top: 1rem;
+    }
+
     .mat-form-field {
       width: 250px;
     }
@@ -18,11 +33,6 @@
       padding-top: 20px;
     }
 
-  }
-
-  .startButton {
-    width: 250px;
-    height: 40px;
   }
 
   .actionContainer {
