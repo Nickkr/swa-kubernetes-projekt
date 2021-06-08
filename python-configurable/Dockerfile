@@ -11,5 +11,6 @@ WORKDIR /app
 #RUN pip3 install -r requirements.txt
 
 COPY . .
+ENV PYTHONBUFFERED=1
 
-CMD [ "python3", "app_configurable.py", "1.0", "2"]
+CMD [ "python3", "app_configurable.py", "1.0", "2", "1", "1","300"]
