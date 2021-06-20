@@ -1,10 +1,11 @@
 from concurrent.futures import process
-import sys
 import time
 from multiprocessing import Process
 from enum import Enum
 import math
 import random
+from os import getenv
+from datetime import datetime
 
 class TestVariant(Enum):
     DEFINED_TIME = 0
@@ -37,6 +38,8 @@ def sqrt_sum(count):
     return y
 
 def process_defined_load(cores, elements):
+    print(f"{datetime.now()} DEFINED LOAD STARTING Cores: {cores}; Elements: {elements};")
+
     start = time.time()
     processes = list()
 
@@ -60,10 +63,11 @@ def process_defined_load(cores, elements):
     # ENDALTERNATIVE
 
     seconds = time.time() - start    
-    print(f"Cores: {cores}; Elements: {elements}; Time:{ seconds}")
+    print(f"{datetime.now()} DEFINED LOAD ENDED Cores: {cores}; Elements: {elements}; Time:{ seconds};")
     return seconds
 
 def process_defined_time(cores, cpu_load, frequency, target_time):
+    print(f"{datetime.now()} DEFINED TIME STARTING Time:{ target_time} Cores: {cores}; CPU Load: {cpu_load}; Interval: {frequency};")
     processes = list()
     for index in range(cores):
         x = Process(target=endless_loop, args=(cpu_load, frequency, target_time,))
@@ -74,6 +78,8 @@ def process_defined_time(cores, cpu_load, frequency, target_time):
     for index in range(cores):
         processes[index].join()
 
+    print(f"{datetime.now()} DEFINED TIME ENDED Time:{ target_time} Cores: {cores}; CPU Load: {cpu_load}; Interval: {frequency};")
+
 def main(cpu_load, frequency, cores, test_variant, target_time):
     if test_variant == TestVariant.DEFINED_TIME:
         process_defined_time(cores, cpu_load, frequency, target_time)
@@ -82,7 +88,20 @@ def main(cpu_load, frequency, cores, test_variant, target_time):
         process_defined_load(cores, elements)
 
 if __name__ == '__main__':
-    main(float(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3]), TestVariant(int(sys.argv[4])), int(sys.argv[5]))
+    cpu_load = float(getenv("CPU_LOAD"))
+    frequency = float(getenv("FREQUENCY"))
+    cores = int(getenv("CORES"))
+    test_variant = TestVariant(int(getenv("TEST_VARIANT")))
+    runtime = int(getenv("RUNTIME"))
 
+    main(cpu_load, frequency, cores, test_variant, runtime)
 
+'''
+For testing: Set environment variables
 
+export CPU_LOAD=0.5
+export FREQUENCY=10
+export CORES=4
+export TEST_VARIANT=0
+export RUNTIME=30
+'''
