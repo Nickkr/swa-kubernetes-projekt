@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-demo
+  namespace: default
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - name: python-demo
+    image: fabianburth/python-configurable:v2.1.1
+    env:
+    - name: CPU_LOAD
+      value: "0.5"
+    - name: FREQUENCY
+      value: "10"
+    - name: CORES
+      value: "4"
+    #TEST_VARIANT:
+    # 0: Test, bei dem über eine Dauer hinweg die CPU zu {CPU_LOAD} (0% (0.00) bis 100% (1.00)) ausgelastet wird
+    # 1: Test, bei dem eine bestimme Last abgearbeitet werden muss
+    - name: TEST_VARIANT
+      value: "1"
+    - name: RUNTIME
+      value: "300"
+    command: ["python3"]
+    args: ["app_configurable.py", "$(CPU_LOAD)", "$(FREQUENCY)", "$(CORES)", "$(TEST_VARIANT)", "$(RUNTIME)"]
