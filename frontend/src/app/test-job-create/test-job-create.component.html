@@ -172,7 +172,14 @@
             >You must enter a value</mat-error
           >
         </mat-form-field>
-        <button mat-raised-button matStepperNext color="primary">Next</button>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the number of nodes to create</mat-label>
+          <input type="number"
+            matInput [formControl]="getControl('testConfig.nodeCount')"
+            required
+          />
+
+        </mat-form-field>
       </div>
     </mat-step>
     <mat-step [stepControl]="testJobForm">
@@ -212,5 +219,5 @@
       </div>
     </mat-step>
   </mat-horizontal-stepper>
-  <div>{{ testJobForm.value | json }}</div>
-</div>
+  </div>
+<div>{{ testJobForm.value | json }}</div>

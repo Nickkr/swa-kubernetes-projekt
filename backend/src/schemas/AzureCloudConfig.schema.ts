@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { TestJobStatus } from 'src/models/TestJobStatus.enum';
 
+import { randomUUID } from 'crypto';
+
 export type AzureCloudConfigDocument = AzureCloudConfig & Document;
 
 @Schema()
