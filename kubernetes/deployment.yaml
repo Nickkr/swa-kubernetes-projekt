@@ -11,8 +11,8 @@ spec:
       image: nickkr/azure_test:2.0
       env:
         - name:  RESOURCE_GROUP_NAME
-          value: 'test-container'
+          value: ''
         - name:  AZURE_SUBSCRIPTION_ID
-          value: efdc416c-2887-4290-b3ff-f8ada95e2314
+          value: ''
   nodeSelector:
     kubernetes.io/os: linux

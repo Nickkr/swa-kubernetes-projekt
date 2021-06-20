@@ -7,6 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -35,6 +36,7 @@ import { ChartsModule } from 'ng2-charts';
     MatFormFieldModule,
     MatDividerModule,
     ChartsModule,
+    MatSelectModule,
     MatStepperModule
   ],
   providers: [],

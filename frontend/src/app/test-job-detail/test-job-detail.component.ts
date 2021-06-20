@@ -5,6 +5,7 @@ import { AwsCloudConfig, AzureCloudConfig, TestJob } from '../models/TestJob.int
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { TestsService } from '../tests.service';
+import { TestJobStatus } from '../models/TestJobStatus.enum';
 
 @Component({
   selector: 'app-test-job-detail',
@@ -27,14 +28,15 @@ export class TestJobDetailComponent implements OnInit {
       ]
     }
   };
-  public barChartLabels: Label[] = ['aws', 'azure'];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
 
+  public barChartLabels: Label[] = [];
   public barChartData: ChartDataSets[] = [
-    { data: [20, 30], label: 'Cost in EUR', backgroundColor: ['#ff9900', '#007fff'] }
+    { data: [], label: 'Cost in EUR', backgroundColor: ['#ff9900', '#007fff'] }
   ];
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,11 +48,18 @@ export class TestJobDetailComponent implements OnInit {
       .get<TestJob>('http://localhost:3000/tests/' + this.testJobId)
       .subscribe((job) => {
         this.testJob = job;
+        this.testJob.cloudConfig.forEach((config) => {
+            this.barChartLabels.push(config.provider);
+            this.barChartData[0].data?.push(config.testResult)
+        })
       });
   }
 
   ngOnInit(): void {}
 
+  public get TestJobStatus() {
+    return TestJobStatus;
+  }
 
   getAzureConfig(): AzureCloudConfig {
     return this.testJob.cloudConfig.find((config) => config.provider === 'azure') as AzureCloudConfig;

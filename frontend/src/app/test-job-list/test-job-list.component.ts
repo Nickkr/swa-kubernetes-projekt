@@ -15,12 +15,16 @@ export class TestJobListComponent implements OnInit {
   testJobStatus: typeof TestJobStatus = TestJobStatus;
 
 
-  constructor(private testsService: TestsService, private router: Router) {}
+  constructor(public testsService: TestsService, private router: Router) {}
 
   ngOnInit(): void {
     this.testsService.getAllTests().subscribe((tests) => {
       this.dataSource = tests;
     });
+  }
+
+  public get TestJobStatus() {
+    return TestJobStatus;
   }
 
   onRowClicked(id: string) {
@@ -37,34 +41,10 @@ export class TestJobListComponent implements OnInit {
     console.log('Job deleted');
   }
 
-  getStatusIcon(status: TestJobStatus): { text: string; iconName: string } {
-    let iconName = '';
-    let text = '';
-    switch (status) {
-      case TestJobStatus.DEPLOYING:
-        iconName = 'cloud_upload';
-        text = 'Deploying to Cloud';
-        break;
-      case TestJobStatus.RUNNING:
-        iconName = 'sync';
-        text = 'Test is running';
-        break;
-      case TestJobStatus.UNDEPLOYING:
-        iconName = 'cloud_download';
-        text = 'Undeploying from Cloud';
-        break;
-      case TestJobStatus.WAITING_FOR_COST:
-        iconName = 'hourglass_empty';
-        text = 'Waiting for costs';
-        break;
-      case TestJobStatus.FINISHED:
-        iconName = 'check_circle';
-        text = 'Finished';
-        break;
-      case TestJobStatus.ERROR:
-        iconName = 'error';
-        break;
-    }
-    return { text, iconName };
+  onUndeploy(provider: string, id: string, event: MouseEvent) {
+    event.stopPropagation();
+    this.testsService.undeployTest(provider, id).subscribe(() => {
+      console.log("undeployed");
+    })
   }
 }

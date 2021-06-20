@@ -22,8 +22,13 @@
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         <div class="status">
-          <mat-icon> {{ getStatusIcon(element.status).iconName }}</mat-icon>
-          <span>({{ getStatusIcon(element.status).text }})</span>
+          <mat-icon
+            [class.status-error]="element.status === TestJobStatus.ERROR"
+            [class.status-finished]="element.status === TestJobStatus.FINISHED"
+          >
+            {{ testsService.getStatusIcon(element.status).iconName }}</mat-icon
+          >
+          <span>{{ testsService.getStatusIcon(element.status).text }}</span>
         </div>
       </td>
     </ng-container>
@@ -43,8 +48,25 @@
       <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let element">
         <div class="status">
-          <button mat-stroked-button color="warn" *ngIf="element.status === testJobStatus.RUNNING" (click)="onCancel($event)">Cancel</button>
-          <button mat-stroked-button color="warn" *ngIf="element.status === testJobStatus.FINISHED"(click)="onDelete($event)">Delete</button>
+          <div *ngFor="let config of element.cloudConfig">
+            <button mat-stroked-button (click)="onUndeploy(config.provider, element._id, $event)">undeploy {{config.provider}}</button>
+          </div>
+          <button
+            mat-stroked-button
+            color="warn"
+            *ngIf="element.status === testJobStatus.RUNNING"
+            (click)="onCancel($event)"
+          >
+            Cancel
+          </button>
+          <button
+            mat-stroked-button
+            color="warn"
+            *ngIf="element.status === testJobStatus.FINISHED"
+            (click)="onDelete($event)"
+          >
+            Delete
+          </button>
         </div>
       </td>
     </ng-container>

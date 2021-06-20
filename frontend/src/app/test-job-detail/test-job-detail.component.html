@@ -29,11 +29,6 @@
       <p id="name">Subscription ID:</p>
       <p id="value">{{ getAzureConfig().subscriptionId }}</p>
     </div>
-    <!-- Tenant ID -->
-    <div class="propertyContainer">
-      <p id="name">Tenant ID:</p>
-      <p id="value">{{ getAzureConfig().tenantId }}</p>
-    </div>
     <!-- Cluster Name -->
     <div class="propertyContainer">
       <p id="name">Cluster name:</p>
@@ -42,12 +37,32 @@
     <!-- Ressource Group Name -->
     <div class="propertyContainer">
       <p id="name">Ressource group name:</p>
-      <p id="value">{{ getAzureConfig().ressourceGroupName }}</p>
+      <p id="value">{{ getAzureConfig().resourceGroupName }}</p>
     </div>
     <!-- Location -->
     <div class="propertyContainer">
       <p id="name">Location:</p>
       <p id="value">{{ getAzureConfig().location }}</p>
+    </div>
+    <!-- Status -->
+    <div class="propertyContainer">
+      <p id="name">Status:</p>
+      <p
+        id="value"
+        [class.status-finished]="
+          TestJobStatus.FINISHED == getAzureConfig().status
+        "
+        [class.status-error]="
+          TestJobStatus.ERROR == getAzureConfig().status
+        "
+      >
+        {{ testService.getStatusIcon(getAzureConfig().status).text }}
+      </p>
+    </div>
+    <!-- Error -->
+    <div class="propertyContainer" *ngIf="getAzureConfig().errorMsg">
+      <p id="name">Error message:</p>
+      <p id="value">{{ getAzureConfig().errorMsg }}</p>
     </div>
     <mat-divider></mat-divider>
     <h2>AWS configuration</h2>

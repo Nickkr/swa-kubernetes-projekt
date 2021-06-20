@@ -19,24 +19,25 @@ export class TestJobCreateComponent implements OnInit {
     this.testJobForm = this.fb.group({
       name: '',
       testConfig: this.fb.group({
-        coreCount: '',
-        cpuLoadFactor: '',
-        frequency: '',
-        testDuration: ''
+        testMode: '0',
+        coreCount: '1',
+        cpuLoadFactor: '0.5',
+        frequency: '10',
+        testDuration: '300',
+        imageUrl: '',
+        nodeCount: 1
       }),
       cloudConfig: this.fb.array([
         this.fb.group({
           provider: 'azure',
-          tenantId: '',
           subscriptionId: '',
-          vmSize: '',
-          nodeCount: 1
+          vmSize: 'Standard_DS2_v2',
         }),
         this.fb.group({
           provider: 'aws',
           profile:'',
           instanceType: '',
-          nodeCount: 1
+          vpcName: ''
         })
       ])
     });
@@ -49,6 +50,7 @@ export class TestJobCreateComponent implements OnInit {
   }
 
   startTestRun(): void {
+    console.log(this.testJobForm.valid);
     if (this.testJobForm.valid) {
       const newTestJob = this.testJobForm.getRawValue();
       this.testService.startTestRun(newTestJob).subscribe(() => {

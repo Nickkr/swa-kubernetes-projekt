@@ -1,16 +1,24 @@
-export interface AwsCloudConfig {
+import { TestJobStatus } from "./TestJobStatus.enum";
+
+export interface AwsCloudConfig extends CloudConfig {
   provider: string;
   _id: string;
 }
 
-export interface AzureCloudConfig {
+export interface AzureCloudConfig extends CloudConfig {
   provider: string;
   _id: string;
   subscriptionId: string;
   tenantId: string;
   location: string;
-  ressourceGroupName: string;
   clusterName: string;
+}
+
+export interface CloudConfig {
+  errorMsg: string
+  status: TestJobStatus
+  resourceGroupName: string;
+  testResult: number;
 }
 
 export interface TestConfig {

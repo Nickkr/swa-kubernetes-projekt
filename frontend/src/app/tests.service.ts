@@ -28,6 +28,14 @@ export class TestsService {
     return this.http.post('http://localhost:3000/tests', newTestJob);
   }
 
+  public undeployTest(provider: string, id: string) {
+    return this.http.post('http://localhost:3000/tests/' + id + '/undeploy', null, {
+      params: {
+        provider
+      }
+    })
+  }
+
   public getStatusIcon(status: TestJobStatus): { text: string; iconName: string } {
     let iconName = '';
     let text = '';
@@ -54,6 +62,7 @@ export class TestsService {
         break;
       case TestJobStatus.ERROR:
         iconName = 'error';
+        text= "Error occured"
         break;
     }
     return { text, iconName };
