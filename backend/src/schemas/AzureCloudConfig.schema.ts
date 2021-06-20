@@ -14,8 +14,6 @@ export class AzureCloudConfig {
     nodeCount: number;
 
     @Prop()
-    tenantId: string;
-    @Prop()
     subscriptionId: string;
     @Prop({default: 'germanywestcentral'})
     location: string;

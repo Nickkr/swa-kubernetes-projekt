@@ -15,9 +15,11 @@ export class CloudConfig {
   status: TestJobStatus;
   @Prop({ default: null })
   testResult: number;
+  @Prop({default: null})
+  errorMsg: string;
   @Prop({ default: randomUUID() })
   resourceGroupName: string;
-  @Prop({ default: 'hska-lab-sose2021-kubernetes-TestCluster' })
+  @Prop({ default: 'TestCluster' })
   clusterName: string;
   @Prop({ default: 1, type: Number })
   nodeCount: number;

@@ -1,19 +1,8 @@
 import { ContainerServiceClient } from '@azure/arm-containerservice';
 import { ResourceManagementClient } from '@azure/arm-resources';
-import {
-  DeviceTokenCredentials,
-  interactiveLogin,
-  AzureCliCredentials
-} from '@azure/ms-rest-nodeauth';
+import { AzureCliCredentials } from '@azure/ms-rest-nodeauth';
 import { HttpService, Injectable, Logger } from '@nestjs/common';
-import { CloudPlatformDeploymentService } from 'src/models/CloudPlatformDeploymentService.interface';
 import { AzureCloudConfig } from 'src/schemas/AzureCloudConfig.schema';
-import { TestJob } from 'src/schemas/TestJob.schema';
-import {
-  BillingManagementClient,
-  BillingManagementModels,
-  BillingManagementMappers
-} from '@azure/arm-billing';
 
 @Injectable()
 export class AzureService {
@@ -21,7 +10,7 @@ export class AzureService {
 
   constructor(private http: HttpService) {}
 
-  private async login(tenantId: string) {
+  private async login() {
     /*     const creds = await interactiveLogin({
           domain: tenantId
         });
@@ -36,7 +25,7 @@ export class AzureService {
 
   public async createCluster(config: AzureCloudConfig): Promise<string> {
     this.logger.log('------------ Loggin in ------------');
-    const creds = await this.login(config.tenantId);
+    const creds = await this.login();
     const containerService = new ContainerServiceClient(
       creds,
       config.subscriptionId
@@ -54,11 +43,12 @@ export class AzureService {
     );
     this.logger.log(rGroup);
     this.logger.log('------------ Creating Cluster ------------');
-    await containerService.managedClusters.createOrUpdate(
+    const cluster = await containerService.managedClusters.createOrUpdate(
       config.resourceGroupName,
       config.clusterName,
       {
         location: config.location,
+        nodeResourceGroup: this.getClusterResourceGroupName(config),
         aadProfile: {
           managed: true
         },
@@ -67,7 +57,7 @@ export class AzureService {
           {
             name: 'testpro',
             mode: 'System',
-            count: config.nodeCount,
+            count: 1,
             vmSize: 'Standard_DS2_v2'
           }
         ],
@@ -89,7 +79,7 @@ export class AzureService {
   }
 
   public async getCost(config: AzureCloudConfig): Promise<number> {
-    const creds = await this.login(config.tenantId);
+    const creds = await this.login();
     const token = await creds.getToken();
     return new Promise((resolve, reject) => {
       this.http
@@ -123,14 +113,14 @@ export class AzureService {
                 Dimensions: {
                   Name: 'ResourceGroupName',
                   Operator: 'In',
-                  Values: ['TestGroup']
+                  Values: [this.getClusterResourceGroupName(config)]
                 }
               }
             },
             timeframe: 'Custom',
             timePeriod: {
-              from: '2021-05-01T00:00:00+00:00',
-              to: '2021-05-31T23:59:59+00:00'
+              from: '2021-06-01T00:00:00+00:00',
+              to: '2021-06-30T23:59:59+00:00'
             }
           },
           {
@@ -140,18 +130,24 @@ export class AzureService {
           }
         )
         .subscribe((response) => {
-          //console.log(response.data.properties.rows[0][0]);
           console.log(response.data);
-          resolve(5);
-          //return response.data.properties.rows[0][0];
+          if (response.data.properties.rows.length > 0) {
+            resolve(response.data.properties.rows[0][0]);
+          } else {
+            resolve(null);
+          }
         });
     });
+  }
+
+  getClusterResourceGroupName(config: AzureCloudConfig) {
+    return config.clusterName + '-' + config.resourceGroupName;
   }
 
   public async removeCluster(config: AzureCloudConfig) {
     this.logger.log('------- Removing Cluster -----');
     try {
-      const creds = await this.login(config.tenantId);
+      const creds = await this.login();
       const resourceClient = new ResourceManagementClient(
         creds,
         config.subscriptionId
