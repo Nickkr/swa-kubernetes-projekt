@@ -55,7 +55,18 @@
           <mat-hint>The cpu frequency</mat-hint>
           <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
+<<<<<<< HEAD
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the number of nodes to create</mat-label>
+          <input type="number"
+            matInput [formControl]="getControl('testConfig.nodeCount')"
+            required
+          />
+
+        </mat-form-field>
+=======
         <button mat-raised-button matStepperNext color="primary">Next</button>
+>>>>>>> origin/master
       </div>
   </mat-step>
   <mat-step [stepControl]="testJobForm">
@@ -108,7 +119,39 @@
         </button>
         </div>
     </div>
+<<<<<<< HEAD
+    <div class="awsConfigContainer">
+      <h3>AWS</h3>
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the profile name:</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.profile')"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the VPC name:</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.vpcName')"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Choose the VM Size</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.instanceType')"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+=======
   </mat-step>
 </mat-horizontal-stepper>
+>>>>>>> origin/master
 </div>
 <div>{{ testJobForm.value | json }}</div>

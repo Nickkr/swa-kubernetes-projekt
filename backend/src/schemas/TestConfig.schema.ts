@@ -13,6 +13,8 @@ export class TestConfig {
     frequency: number;
     @Prop()
     testDuration: number;
+    @Prop({default: 1,type:Number})
+    nodeCount:number;
 }
 
 export const TestConfigSchema = SchemaFactory.createForClass(TestConfig);

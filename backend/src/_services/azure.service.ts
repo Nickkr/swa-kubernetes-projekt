@@ -47,7 +47,7 @@ export class AzureService {
       config.subscriptionId
     );
     const rGroup = await resourceClient.resourceGroups.createOrUpdate(
-      config.ressourceGroupName,
+      config.resourceGroupName,
       {
         location: config.location
       }
@@ -55,7 +55,7 @@ export class AzureService {
     this.logger.log(rGroup);
     this.logger.log('------------ Creating Cluster ------------');
     await containerService.managedClusters.createOrUpdate(
-      config.ressourceGroupName,
+      config.resourceGroupName,
       config.clusterName,
       {
         location: config.location,
@@ -67,7 +67,7 @@ export class AzureService {
           {
             name: 'testpro',
             mode: 'System',
-            count: 1,
+            count: config.nodeCount,
             vmSize: 'Standard_DS2_v2'
           }
         ],
@@ -81,7 +81,7 @@ export class AzureService {
     this.logger.log('---------- Getting Kube Credentials ------------');
     const kubeCredentials =
       await containerService.managedClusters.listClusterAdminCredentials(
-        config.ressourceGroupName,
+        config.resourceGroupName,
         config.clusterName
       );
     this.logger.log(kubeCredentials.kubeconfigs[0].value.toString());
@@ -157,7 +157,7 @@ export class AzureService {
         config.subscriptionId
       );
       const rGroup = await resourceClient.resourceGroups.deleteMethod(
-        config.ressourceGroupName
+        config.resourceGroupName
       );
       this.logger.log(rGroup);
     } catch (error) {

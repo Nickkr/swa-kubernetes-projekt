@@ -29,10 +29,14 @@ export class TestJobCreateComponent implements OnInit {
           provider: 'azure',
           tenantId: '',
           subscriptionId: '',
-          vmSize: ''
+          vmSize: '',
+          nodeCount: 1
         }),
         this.fb.group({
-          provider: 'aws'
+          provider: 'aws',
+          profile:'',
+          instanceType: '',
+          nodeCount: 1
         })
       ])
     });
