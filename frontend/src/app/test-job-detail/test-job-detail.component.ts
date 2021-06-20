@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TestJob } from '../models/TestJob.interface';
+import { AwsCloudConfig, AzureCloudConfig, TestJob } from '../models/TestJob.interface';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { TestsService } from '../tests.service';
 
 @Component({
   selector: 'app-test-job-detail',
@@ -37,7 +38,8 @@ export class TestJobDetailComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    public testService: TestsService
   ) {
     this.testJobId = this.activatedRoute.snapshot.params.id;
     this.http
@@ -48,4 +50,13 @@ export class TestJobDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+
+  getAzureConfig(): AzureCloudConfig {
+    return this.testJob.cloudConfig.find((config) => config.provider === 'azure') as AzureCloudConfig;
+  }
+
+  getAwsConfig(): AwsCloudConfig {
+    return this.testJob.cloudConfig.find((config) => config.provider === 'azure') as AwsCloudConfig;
+  }
 }

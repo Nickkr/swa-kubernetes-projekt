@@ -25,4 +25,5 @@ export interface TestJob {
   results: any[];
   __v: number;
   status: number;
+  time: Date;
 }

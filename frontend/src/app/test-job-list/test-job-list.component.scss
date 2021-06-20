@@ -2,6 +2,10 @@
   width: 100%;
   padding-top: 2rem;
 
+  table {
+    margin-top: 2rem;
+  }
+
   .mat-row .mat-cell {
     cursor: pointer;
   }
@@ -15,7 +19,23 @@
 
     .status {
       display: flex;
+      align-items: center;
+      span {
+        padding-left: 0.5rem;
+      }
     }
   }
 }
 
+#noTestsFoundHint {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  font-weight: 500;
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+.mat-stroked-button {
+  background-color: white;
+}

@@ -1,26 +1,82 @@
-<button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
-  <mat-icon>arrow_back</mat-icon>
-</button>
+<div class="header">
+  <button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div id="title">Details</div>
+</div>
 <div class="detailsContainer row">
   <div class="configContainer col">
-    <h2>Configuration</h2>
-    <div>{{ testJob | json}}</div>
+    <h2>General test configuration</h2>
+    <!-- Name -->
+    <div class="propertyContainer">
+      <p id="name">Name:</p>
+      <p id="value">{{ testJob.name }}</p>
+    </div>
+    <!-- Datum -->
+    <div class="propertyContainer">
+      <p id="name">Datum:</p>
+      <p id="value">{{ testJob.time | date }}</p>
+    </div>
+    <!-- Status -->
+    <div class="propertyContainer">
+      <p id="name">Status:</p>
+      <p id="value">{{ testService.getStatusIcon(testJob.status).text }}</p>
+    </div>
+    <mat-divider></mat-divider>
+    <h2>Azure configuration</h2>
+    <!-- Subscription ID -->
+    <div class="propertyContainer">
+      <p id="name">Subscription ID:</p>
+      <p id="value">{{ getAzureConfig().subscriptionId }}</p>
+    </div>
+    <!-- Tenant ID -->
+    <div class="propertyContainer">
+      <p id="name">Tenant ID:</p>
+      <p id="value">{{ getAzureConfig().tenantId }}</p>
+    </div>
+    <!-- Cluster Name -->
+    <div class="propertyContainer">
+      <p id="name">Cluster name:</p>
+      <p id="value">{{ getAzureConfig().clusterName }}</p>
+    </div>
+    <!-- Ressource Group Name -->
+    <div class="propertyContainer">
+      <p id="name">Ressource group name:</p>
+      <p id="value">{{ getAzureConfig().ressourceGroupName }}</p>
+    </div>
+    <!-- Location -->
+    <div class="propertyContainer">
+      <p id="name">Location:</p>
+      <p id="value">{{ getAzureConfig().location }}</p>
+    </div>
+    <mat-divider></mat-divider>
+    <h2>AWS configuration</h2>
+    <!-- Tenant ID -->
+    <div class="propertyContainer">
+      <p id="name">Example:</p>
+      <p id="value">{{ 'TestValue' }}</p>
+    </div>
+    <!-- Tenant ID -->
+    <div class="propertyContainer">
+      <p id="name">Example:</p>
+      <p id="value">{{ 'TestValue' }}</p>
+    </div>
   </div>
-  <div class="resultChartContainer col">´
+  <div class="resultChartContainer col">
     <h2>Result</h2>
-    <div style="display: block;">
-      <canvas baseChart
+    <div style="display: block">
+      <canvas
+        baseChart
         [datasets]="barChartData"
         [labels]="barChartLabels"
         [options]="barChartOptions"
         [plugins]="barChartPlugins"
         [legend]="barChartLegend"
-        [chartType]="barChartType">
+        [chartType]="barChartType"
+      >
       </canvas>
     </div>
-
   </div>
 </div>
-
-
-
+<!-- <div>{{ testJob | json }}</div>
+ -->

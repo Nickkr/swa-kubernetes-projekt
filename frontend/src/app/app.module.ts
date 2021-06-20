@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatStepperModule } from '@angular/material/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -33,7 +34,8 @@ import { ChartsModule } from 'ng2-charts';
     MatInputModule,
     MatFormFieldModule,
     MatDividerModule,
-    ChartsModule
+    ChartsModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]

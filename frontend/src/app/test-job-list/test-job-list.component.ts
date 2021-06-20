@@ -10,8 +10,10 @@ import { TestsService } from '../tests.service';
   styleUrls: ['./test-job-list.component.scss']
 })
 export class TestJobListComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'status', 'time'];
+  displayedColumns: string[] = ['name', 'status', 'time', 'action'];
   dataSource: TestJob[] = [];
+  testJobStatus: typeof TestJobStatus = TestJobStatus;
+
 
   constructor(private testsService: TestsService, private router: Router) {}
 
@@ -23,6 +25,16 @@ export class TestJobListComponent implements OnInit {
 
   onRowClicked(id: string) {
     this.router.navigate(['testjobs', id]);
+  }
+
+  onCancel(event: MouseEvent) {
+    event.stopPropagation();
+    console.log('Job canceled');
+  }
+
+  onDelete(event: MouseEvent) {
+    event.stopPropagation();
+    console.log('Job deleted');
   }
 
   getStatusIcon(status: TestJobStatus): { text: string; iconName: string } {

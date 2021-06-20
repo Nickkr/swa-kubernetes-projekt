@@ -1,3 +1,13 @@
 .detailsContainer {
   padding-top: 2rem;
 }
+
+.propertyContainer {
+  display: flex;
+
+  #name {
+    padding-right: 0.5rem;
+    font-weight: 500;
+  }
+}
+

@@ -1,23 +1,26 @@
-<button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
-  <mat-icon>arrow_back</mat-icon>
-</button>
+<div class="header">
+  <button class="returnButton" mat-icon-button routerLinkActive routerLink="/">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div id="title">Create test job</div>
+</div>
 <div class="formContainer">
-  <!-- General test config form-->
-  <div class="generalConfigContainer">
-    <h2>General test configuration</h2>
-    <div class="column">
-      <div class="row">
+<mat-horizontal-stepper #stepper>
+  <mat-step [stepControl]="testJobForm">
+    <ng-template matStepLabel>General test configuration</ng-template>
+    <div class="column stepperContentContainer">
         <mat-form-field appearance="outline">
           <mat-label>Enter test name</mat-label>
           <input matInput [formControl]="getControl('name')" required />
+          <mat-hint>The name of the test</mat-hint>
+          <mat-error *ngIf="getControl('name').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Duration of the test (in min)</mat-label>
           <input type="number" matInput [formControl]="getControl('testConfig.testDuration')" required />
+          <mat-hint>The duration of the test in minutes</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.testDuration').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <h3>Load settings:</h3>
         <mat-form-field appearance="outline">
           <mat-label>Enter the amount of cores</mat-label>
           <input
@@ -27,6 +30,8 @@
             [formControl]="getControl('testConfig.coreCount')"
             required
           />
+          <mat-hint>The amount of cores that should be utilized</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.coreCount').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Enter the cpu load factor</mat-label>
@@ -36,6 +41,8 @@
             [formControl]="getControl('testConfig.cpuLoadFactor')"
             required
           />
+          <mat-hint>The cpu load factor</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.cpuLoadFactor').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Enter the frequency</mat-label>
@@ -45,7 +52,10 @@
             [formControl]="getControl('testConfig.frequency')"
             required
           />
+          <mat-hint>The cpu frequency</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
+<<<<<<< HEAD
         <mat-form-field appearance="outline">
           <mat-label>Enter the number of nodes to create</mat-label>
           <input type="number"
@@ -54,30 +64,33 @@
           />
 
         </mat-form-field>
+=======
+        <button mat-raised-button matStepperNext color="primary">Next</button>
+>>>>>>> origin/master
       </div>
-    </div>
-  </div>
-  <mat-divider></mat-divider>
-  <div class="cloudConfigContainer">
-    <h2>Cloud specific configuration</h2>
-    <div class="azureConfigContainer">
-      <h3>Azure</h3>
-      <div class="row">
+  </mat-step>
+  <mat-step [stepControl]="testJobForm">
+    <ng-template matStepLabel>Azure configuration</ng-template>
+    <div class="stepperContentContainer column">
         <mat-form-field appearance="outline">
-          <mat-label>Enter the tenantId</mat-label>
+          <mat-label>Enter a tenant ID</mat-label>
           <input
             matInput
             [formControl]="getControl('cloudConfig.0.tenantId')"
             required
           />
+          <mat-hint>The tenant ID of the azure account</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Enter the subscriptionId</mat-label>
+          <mat-label>Enter the subscription ID</mat-label>
           <input
             matInput
             [formControl]="getControl('cloudConfig.0.subscriptionId')"
             required
           />
+          <mat-hint>The subscription ID of the azure account</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Enter the VMSize</mat-label>
@@ -86,9 +99,27 @@
             [formControl]="getControl('cloudConfig.0.vmSize')"
             required
           />
+          <mat-hint>The VMSize of the cluster nodes</mat-hint>
+          <mat-error *ngIf="getControl('testConfig.frequency').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
+        <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
+  </mat-step>
+  <mat-step [stepControl]="testJobForm">
+    <ng-template matStepLabel>AWS configuration</ng-template>
+    <div>
+      <div class="actionContainer">
+        <button
+          mat-raised-button
+          class="startTestButton"
+          [disabled]="testJobForm.invalid"
+          color="primary"
+        >
+          Start test
+        </button>
+        </div>
     </div>
+<<<<<<< HEAD
     <div class="awsConfigContainer">
       <h3>AWS</h3>
       <div class="row">
@@ -118,15 +149,9 @@
       </div>
     </div>
   </div>
+=======
+  </mat-step>
+</mat-horizontal-stepper>
+>>>>>>> origin/master
 </div>
 <div>{{ testJobForm.value | json }}</div>
-<div class="actionContainer">
-  <button
-    mat-raised-button
-    class="startButton"
-    [disabled]="testJobForm.invalid"
-    color="primary"
-  >
-    Start test
-  </button>
-</div>
