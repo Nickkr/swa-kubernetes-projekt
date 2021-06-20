@@ -4,7 +4,7 @@ metadata:
   name: app-demo
   namespace: default
 spec:
-  restartPolicy: OnFailure
+  restartPolicy: Never
   containers:
   - name: python-demo
     image: fabianburth/python-configurable:v2.1.1
