@@ -30,7 +30,6 @@ export class TestJobService {
     testJob.status = TestJobStatus.DEPLOYING;
     await testJob.save();
     testJob.cloudConfig
-      .filter((cloudConf) => cloudConf.provider === 'azure')
       .forEach(async (config) => {
         try {
           const cloudService = this.getCloudService(config.provider);
@@ -41,7 +40,7 @@ export class TestJobService {
             testJob.testConfig
           );
           config.status = TestJobStatus.RUNNING;
-          testJob.save();
+          await testJob.save();
           this.logger.log('-------- Deployed -------');
           this.logger.log(kubeResponse);
         } catch (error) {
@@ -49,11 +48,11 @@ export class TestJobService {
           config.errorMsg = error;
           config.status = TestJobStatus.ERROR;
           testJob.status = TestJobStatus.ERROR;
-          testJob.save();
+          await testJob.save();
         }
       });
     testJob.status = TestJobStatus.RUNNING;
-    testJob.save();
+    await testJob.save();
   }
 
   getCloudService(provider: string): CloudPlatformDeploymentService {
@@ -73,11 +72,11 @@ export class TestJobService {
       const cloudService = this.getCloudService(config.provider);
       testJob.status = TestJobStatus.UNDEPLOYING;
       testJob.cloudConfig[index].status = TestJobStatus.UNDEPLOYING;
-      testJob.save();
+      await testJob.save();
       await cloudService.removeCluster(config);
       testJob.status = TestJobStatus.WAITING_FOR_COST;
       testJob.cloudConfig[index].status = TestJobStatus.WAITING_FOR_COST;
-      testJob.save();
+      await testJob.save();
     });
   }
 

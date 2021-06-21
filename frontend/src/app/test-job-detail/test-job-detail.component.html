@@ -66,15 +66,45 @@
     </div>
     <mat-divider></mat-divider>
     <h2>AWS configuration</h2>
-    <!-- Tenant ID -->
+    <!-- location -->
     <div class="propertyContainer">
-      <p id="name">Example:</p>
-      <p id="value">{{ 'TestValue' }}</p>
+      <p id="name">Location:</p>
+      <p id="value">{{ getAwsConfig().location }}</p>
     </div>
-    <!-- Tenant ID -->
+    <!-- profile -->
     <div class="propertyContainer">
-      <p id="name">Example:</p>
-      <p id="value">{{ 'TestValue' }}</p>
+      <p id="name">Profile:</p>
+      <p id="value">{{ getAwsConfig().profile }}</p>
+    </div>
+    <!-- disk size -->
+    <div class="propertyContainer">
+      <p id="name">Disk size:</p>
+      <p id="value">{{ getAwsConfig().diskSize }}</p>
+    </div>
+    <!-- instance type -->
+    <div class="propertyContainer">
+      <p id="name">Instance type:</p>
+      <p id="value">{{ getAwsConfig().instanceType }}</p>
+    </div>
+    <!-- Status -->
+    <div class="propertyContainer">
+      <p id="name">Status:</p>
+      <p
+        id="value"
+        [class.status-finished]="
+          TestJobStatus.FINISHED == getAwsConfig().status
+        "
+        [class.status-error]="
+          TestJobStatus.ERROR == getAwsConfig().status
+        "
+      >
+        {{ testService.getStatusIcon(getAwsConfig().status).text }}
+      </p>
+    </div>
+    <!-- Error message -->
+    <div class="propertyContainer" *ngIf="getAzureConfig().errorMsg">
+      <p id="name">Error message:</p>
+      <p id="value">{{ getAzureConfig().errorMsg }}</p>
     </div>
   </div>
   <div class="resultChartContainer col">

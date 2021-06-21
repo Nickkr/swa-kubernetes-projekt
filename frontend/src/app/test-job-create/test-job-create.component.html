@@ -172,14 +172,7 @@
             >You must enter a value</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Enter the number of nodes to create</mat-label>
-          <input type="number"
-            matInput [formControl]="getControl('testConfig.nodeCount')"
-            required
-          />
-
-        </mat-form-field>
+        <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
     </mat-step>
     <mat-step [stepControl]="testJobForm">
@@ -189,14 +182,7 @@
           <mat-label>Enter the profile name:</mat-label>
           <input matInput [formControl]="getControl('cloudConfig.1.profile')" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Enter the VPC name:</mat-label>
-          <input
-            matInput
-            [formControl]="getControl('cloudConfig.1.vpcName')"
-            required
-          />
-        </mat-form-field>
+        
         <mat-form-field appearance="outline">
           <mat-label>Choose the VM Size</mat-label>
           <input

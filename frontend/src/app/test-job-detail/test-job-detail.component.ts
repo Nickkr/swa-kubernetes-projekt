@@ -66,6 +66,6 @@ export class TestJobDetailComponent implements OnInit {
   }
 
   getAwsConfig(): AwsCloudConfig {
-    return this.testJob.cloudConfig.find((config) => config.provider === 'azure') as AwsCloudConfig;
+    return this.testJob.cloudConfig.find((config) => config.provider === 'aws') as AwsCloudConfig;
   }
 }

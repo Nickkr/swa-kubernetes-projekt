@@ -36,8 +36,7 @@ export class TestJobCreateComponent implements OnInit {
         this.fb.group({
           provider: 'aws',
           profile:'',
-          instanceType: '',
-          vpcName: ''
+          instanceType: 't3.medium'
         })
       ])
     });
