@@ -21,7 +21,7 @@ def endless_loop(cpu_load, frequency, target_time):
 
     while time.perf_counter() - startTime < target_time:
         counter = counter + 1
-        if time.perf_counter() - lastTime >= frequency:
+        if time.perf_counter() - lastTime >= frequency - sleep_duration:
             #print(lastTime-time.perf_counter(), " sleeping...")
             time.sleep(sleep_duration)
             #print(lastTime-time.perf_counter(), " ended sleeping...")
