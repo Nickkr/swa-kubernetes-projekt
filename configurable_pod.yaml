@@ -7,7 +7,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: python-demo
-    image: fabianburth/python-configurable:v2.1.1
+    image: fabianburth/python-configurable:v3.0.0
     env:
     - name: CPU_LOAD
       value: "0.5"
