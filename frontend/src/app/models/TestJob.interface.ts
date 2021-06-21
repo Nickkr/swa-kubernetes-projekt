@@ -33,6 +33,18 @@ export interface CloudConfig {
 
 export interface TestConfig {
   _id: string;
+  testMode: TestModeEnum,
+  coreCount: string,
+  cpuLoadFactor: string,
+  frequency: string,
+  testDuration: string,
+  imageUrl: string,
+}
+
+export enum TestModeEnum {
+  DEFINED_DURATION = "0",
+  DEFINED_LOAD = "1",
+  CUSTOM = "2"
 }
 
 export interface TestJob {

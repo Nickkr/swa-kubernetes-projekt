@@ -27,6 +27,7 @@
     "@aws-sdk/client-resource-groups": "^3.18.0",
     "@aws-sdk/credential-provider-node": "^3.18.0",
     "@azure/arm-billing": "^3.0.0",
+    "@azure/arm-compute-profile-2020-09-01-hybrid": "^1.0.0",
     "@azure/arm-consumption": "^7.0.0",
     "@azure/arm-containerinstance": "^6.1.0",
     "@azure/arm-containerservice": "^13.2.0",

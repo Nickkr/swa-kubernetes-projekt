@@ -4,18 +4,68 @@
   </button>
   <div id="title">Details</div>
 </div>
-<div class="detailsContainer row">
+<div class="detailsContainer row" *ngIf="testJob">
   <div class="configContainer col">
     <h2>General test configuration</h2>
     <!-- Name -->
     <div class="propertyContainer">
       <p id="name">Name:</p>
-      <p id="value">{{ testJob.name }}</p>
+      <p id="value">{{ testJob?.name }}</p>
     </div>
-    <!-- Datum -->
+    <!-- Date -->
     <div class="propertyContainer">
-      <p id="name">Datum:</p>
-      <p id="value">{{ testJob.time | date }}</p>
+      <p id="name">Created at:</p>
+      <p id="value">{{ testJob?.time | date }}</p>
+    </div>
+    <!-- TestMode -->
+    <div class="propertyContainer">
+      <p id="name">Test mode:</p>
+      <p id="value">
+        {{ testService.getTestModeText(testJob.testConfig.testMode) }}
+      </p>
+    </div>
+    <!-- Core count -->
+    <div class="propertyContainer">
+      <p id="name">Core count:</p>
+      <p id="value">
+        {{ testJob.testConfig.coreCount ? testJob.testConfig.coreCount : '-' }}
+      </p>
+    </div>
+    <!-- CPU Load factor -->
+    <div class="propertyContainer">
+      <p id="name">CPU load factor:</p>
+      <p id="value">
+        {{
+          testJob.testConfig.cpuLoadFactor
+            ? testJob.testConfig.cpuLoadFactor
+            : '-'
+        }}
+      </p>
+    </div>
+    <!-- Interval  -->
+    <div class="propertyContainer">
+      <p id="name">Interval:</p>
+      <p id="value">
+        {{ testJob.testConfig.frequency ? testJob.testConfig.frequency : '-' }}
+      </p>
+    </div>
+    <!-- duration  -->
+    <div class="propertyContainer">
+      <p id="name">Test duration:</p>
+      <p id="value">
+        {{
+          testJob.testConfig.testDuration
+            ? testJob.testConfig.testDuration
+            : '-'
+        }}
+      </p>
+    </div>
+    <!-- image url -->
+    <div class="propertyContainer" *ngIf="testJob.testConfig.imageUrl">
+      <p id="name">Image URL:</p>
+      <p id="value">
+        {{ testJob.testConfig.imageUrl ? testJob.testConfig.imageUrl : '-' }}
+      </p>
     </div>
     <!-- Status -->
     <div class="propertyContainer">
@@ -52,9 +102,7 @@
         [class.status-finished]="
           TestJobStatus.FINISHED == getAzureConfig().status
         "
-        [class.status-error]="
-          TestJobStatus.ERROR == getAzureConfig().status
-        "
+        [class.status-error]="TestJobStatus.ERROR == getAzureConfig().status"
       >
         {{ testService.getStatusIcon(getAzureConfig().status).text }}
       </p>
@@ -94,9 +142,7 @@
         [class.status-finished]="
           TestJobStatus.FINISHED == getAwsConfig().status
         "
-        [class.status-error]="
-          TestJobStatus.ERROR == getAwsConfig().status
-        "
+        [class.status-error]="TestJobStatus.ERROR == getAwsConfig().status"
       >
         {{ testService.getStatusIcon(getAwsConfig().status).text }}
       </p>

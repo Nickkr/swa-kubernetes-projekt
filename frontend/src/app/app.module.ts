@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { TestJobDetailComponent } from './test-job-detail/test-job-detail.component';
 import { TestJobListComponent } from './test-job-list/test-job-list.component';
@@ -25,7 +26,8 @@ import { ChartsModule } from 'ng2-charts';
     BrowserModule,
     AppRoutingModule,
     CdkTableModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
+    MatListModule,
     MatButtonModule,
     HttpClientModule,
     FormsModule,

@@ -47,21 +47,6 @@ import {  ResourceGroupsClient, CreateGroupCommand, DeleteGroupCommand } from "@
 
 import { STSClient, GetCallerIdentityCommand, AssumeRoleWithSAMLCommand } from "@aws-sdk/client-sts";
 
-import { 
-    IAMClient,
-    CreateRoleCommand,
-    CreateRoleCommandOutput, 
-    Role,
-    DeleteRoleCommand,
-    DeleteRoleCommandOutput,
-    AttachRolePolicyCommand,
-    AttachRolePolicyCommandOutput,
-    DetachRolePolicyCommand,
-    DetachRolePolicyCommandOutput,
-    CreateOpenIDConnectProviderCommand,
-    CreateOpenIDConnectProviderCommandOutput,
-    DeleteOpenIDConnectProviderCommand,
-} from "@aws-sdk/client-iam";
 
 import { CostExplorerClient, GetCostAndUsageCommand } from "@aws-sdk/client-cost-explorer";
 import * as path from 'path';

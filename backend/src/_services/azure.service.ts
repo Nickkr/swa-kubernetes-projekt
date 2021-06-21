@@ -3,6 +3,7 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { AzureCliCredentials } from '@azure/ms-rest-nodeauth';
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { AzureCloudConfig } from 'src/schemas/AzureCloudConfig.schema';
+import { ComputeManagementClient, ComputeManagementModels, ComputeManagementMappers } from "@azure/arm-compute-profile-2020-09-01-hybrid";
 
 @Injectable()
 export class AzureService {
@@ -21,6 +22,12 @@ export class AzureService {
 
   private getCostManagementUrl(config: AzureCloudConfig) {
     return `https://management.azure.com/subscriptions/${config.subscriptionId}/providers/Microsoft.CostManagement/query?api-version=2019-11-01&$top=5000`;
+  }
+
+  public async getVmSizes() {
+    const creds = await this.login();
+    const client = new ComputeManagementClient(creds, 'efdc416c-2887-4290-b3ff-f8ada95e2314');
+    return await client.virtualMachineSizes.list('germanywestcentral');
   }
 
   public async createCluster(config: AzureCloudConfig): Promise<string> {

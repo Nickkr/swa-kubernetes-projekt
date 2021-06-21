@@ -20,7 +20,6 @@ export class TestJobService {
 
   constructor(
     @InjectModel(TestJob.name) private testJobModel: Model<TestJobDocument>,
-    private schedulerRegistry: SchedulerRegistry,
     private azureService: AzureService,
     private awsService: AwsService,
     private kubernetesService: KubernetesService
@@ -29,28 +28,31 @@ export class TestJobService {
   async startTestJob(testJob: TestJobDocument) {
     testJob.status = TestJobStatus.DEPLOYING;
     await testJob.save();
-    testJob.cloudConfig
-      .forEach(async (config) => {
-        try {
-          const cloudService = this.getCloudService(config.provider);
-          const kubeConfig = await cloudService.createCluster(config);
-          const kubeResponse = await this.kubernetesService.deployToCluster(
-            kubeConfig,
-            config,
-            testJob.testConfig
-          );
-          config.status = TestJobStatus.RUNNING;
-          await testJob.save();
-          this.logger.log('-------- Deployed -------');
-          this.logger.log(kubeResponse);
-        } catch (error) {
-          this.logger.log(error);
-          config.errorMsg = error;
-          config.status = TestJobStatus.ERROR;
-          testJob.status = TestJobStatus.ERROR;
-          await testJob.save();
-        }
-      });
+    await Promise.all(
+      testJob.cloudConfig
+        .filter((cloudConf) => cloudConf.provider === 'azure')
+        .map(async (config) => {
+          try {
+            const cloudService = this.getCloudService(config.provider);
+            const kubeConfig = await cloudService.createCluster(config);
+            const kubeResponse = await this.kubernetesService.deployToCluster(
+              kubeConfig,
+              config,
+              testJob.testConfig
+            );
+            config.status = TestJobStatus.RUNNING;
+            await testJob.save();
+            this.logger.log('-------- Deployed -------');
+            this.logger.log(kubeResponse);
+          } catch (error) {
+            this.logger.log(error);
+            config.errorMsg = error;
+            config.status = TestJobStatus.ERROR;
+            testJob.status = TestJobStatus.ERROR;
+            await testJob.save();
+          }
+        })
+    );
     testJob.status = TestJobStatus.RUNNING;
     await testJob.save();
   }
@@ -65,19 +67,24 @@ export class TestJobService {
   }
 
   async undeployTestJob(testJob: TestJobDocument, provider: string) {
-    testJob.cloudConfig.forEach( async (config, index) => {
-      if (provider && config.provider !== provider) {
-        return;
-      }
-      const cloudService = this.getCloudService(config.provider);
-      testJob.status = TestJobStatus.UNDEPLOYING;
-      testJob.cloudConfig[index].status = TestJobStatus.UNDEPLOYING;
-      await testJob.save();
-      await cloudService.removeCluster(config);
-      testJob.status = TestJobStatus.WAITING_FOR_COST;
-      testJob.cloudConfig[index].status = TestJobStatus.WAITING_FOR_COST;
-      await testJob.save();
-    });
+    Promise.all(
+      testJob.cloudConfig.filter(config => {
+        if(provider) {
+          return config.provider === provider;
+        } else {
+          return true;
+        }
+      }).map(async (config, index) => {
+        const cloudService = this.getCloudService(config.provider);
+        testJob.status = TestJobStatus.UNDEPLOYING;
+        testJob.cloudConfig[index].status = TestJobStatus.UNDEPLOYING;
+        await testJob.save();
+        await cloudService.removeCluster(config);
+        testJob.status = TestJobStatus.WAITING_FOR_COST;
+        testJob.cloudConfig[index].status = TestJobStatus.WAITING_FOR_COST;
+        await testJob.save();
+      })
+    );
   }
 
   @Cron('5 * * * * *')
