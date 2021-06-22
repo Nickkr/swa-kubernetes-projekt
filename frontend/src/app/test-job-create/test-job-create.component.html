@@ -8,122 +8,135 @@
   <mat-horizontal-stepper #stepper>
     <mat-step [stepControl]="testJobForm">
       <ng-template matStepLabel>General test configuration</ng-template>
-      <div class="column stepperContentContainer">
-        <mat-form-field appearance="outline">
-          <mat-label>Enter test name</mat-label>
-          <input matInput [formControl]="getControl('name')" required />
-          <mat-hint>The name of the test</mat-hint>
-          <mat-error *ngIf="getControl('name').hasError('required')"
-            >You must enter a value</mat-error
-          >
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Enter the test mode</mat-label>
-          <mat-select [formControl]="getControl('testConfig.testMode')">
-            <mat-option value="0">Defined duration</mat-option>
-            <mat-option value="1">Defined load</mat-option>
-            <mat-option value="2">Custom test</mat-option>
-          </mat-select>
-          <mat-hint>The mode of the test</mat-hint>
-          <mat-error *ngIf="getControl('name').hasError('required')"
-            >You must enter a value</mat-error
-          >
-        </mat-form-field>
-        <div *ngIf="getControl('testConfig.testMode').value === '0'">
+      <div class="row stepperContentContainer">
+        <div class="col-sm column">
           <mat-form-field appearance="outline">
-            <mat-label>Duration of the test (in sec)</mat-label>
-            <input
-              type="number"
-              matInput
-              [formControl]="getControl('testConfig.testDuration')"
-              required
-            />
-            <mat-hint>The duration of the test in seconds</mat-hint>
-            <mat-error
-              *ngIf="getControl('testConfig.testDuration').hasError('required')"
+            <mat-label>Enter test name</mat-label>
+            <input matInput [formControl]="getControl('name')" required />
+            <mat-hint>The name of the test</mat-hint>
+            <mat-error *ngIf="getControl('name').hasError('required')"
               >You must enter a value</mat-error
             >
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>Enter the amount of cores</mat-label>
-            <input
-              type="number"
-              maxlength="2"
-              matInput
-              [formControl]="getControl('testConfig.coreCount')"
-              required
-            />
-            <mat-hint>The amount of cores that should be utilized</mat-hint>
-            <mat-error
-              *ngIf="getControl('testConfig.coreCount').hasError('required')"
-              >You must enter a value</mat-error
-            >
+            <mat-label>Enter the test mode</mat-label>
+            <mat-select [formControl]="getControl('testConfig.testMode')">
+              <mat-option value="0">Defined duration</mat-option>
+              <mat-option value="1">Defined load</mat-option>
+              <mat-option value="2">Custom test</mat-option>
+            </mat-select>
+            <mat-hint>The mode of the test</mat-hint>
           </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Enter the cpu load factor</mat-label>
-            <input
-              type="number"
-              matInput
-              [formControl]="getControl('testConfig.cpuLoadFactor')"
-              required
-            />
-            <mat-hint>The cpu load factor</mat-hint>
-            <mat-error
-              *ngIf="
-                getControl('testConfig.cpuLoadFactor').hasError('required')
-              "
-              >You must enter a value</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Enter the interval (in sec)</mat-label>
-            <input
-              type="number"
-              matInput
-              [formControl]="getControl('testConfig.frequency')"
-              required
-            />
-            <mat-hint>The interval in seconds</mat-hint>
-            <mat-error
-              *ngIf="getControl('testConfig.frequency').hasError('required')"
-              >You must enter a value</mat-error
-            >
-          </mat-form-field>
+          <div *ngIf="getControl('testConfig.testMode').value === '0'">
+            <div class="formRow">
+              <mat-form-field appearance="outline">
+                <mat-label>Duration of the test (in sec)</mat-label>
+                <input
+                  type="number"
+                  matInput
+                  [formControl]="getControl('testConfig.testDuration')"
+                  required
+                />
+                <mat-hint>The duration of the test in seconds</mat-hint>
+                <mat-error
+                  *ngIf="
+                    getControl('testConfig.testDuration').hasError('required')
+                  "
+                  >You must enter a value</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Enter the amount of cores</mat-label>
+                <input
+                  type="number"
+                  maxlength="2"
+                  matInput
+                  [formControl]="getControl('testConfig.coreCount')"
+                  required
+                />
+                <mat-hint>The amount of cores that should be utilized</mat-hint>
+                <mat-error
+                  *ngIf="
+                    getControl('testConfig.coreCount').hasError('required')
+                  "
+                  >You must enter a value</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Enter the cpu load factor</mat-label>
+              <input
+                type="number"
+                matInput
+                [formControl]="getControl('testConfig.cpuLoadFactor')"
+                required
+              />
+              <mat-hint>The cpu load factor</mat-hint>
+              <mat-error
+                *ngIf="
+                  getControl('testConfig.cpuLoadFactor').hasError('required')
+                "
+                >You must enter a value</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Enter the interval (in sec)</mat-label>
+              <input
+                type="number"
+                matInput
+                [formControl]="getControl('testConfig.frequency')"
+                required
+              />
+              <mat-hint>The interval in seconds</mat-hint>
+              <mat-error
+                *ngIf="getControl('testConfig.frequency').hasError('required')"
+                >You must enter a value</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div *ngIf="getControl('testConfig.testMode').value === '1'">
+            <mat-form-field appearance="outline">
+              <mat-label>Enter the amount of cores</mat-label>
+              <input
+                type="number"
+                maxlength="2"
+                matInput
+                [formControl]="getControl('testConfig.coreCount')"
+                required
+              />
+              <mat-hint>The amount of cores that should be utilized</mat-hint>
+              <mat-error
+                *ngIf="getControl('testConfig.coreCount').hasError('required')"
+                >You must enter a value</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div *ngIf="getControl('testConfig.testMode').value === '2'">
+            <mat-form-field appearance="outline">
+              <mat-label>Enter the url of a docker image</mat-label>
+              <input
+                matInput
+                [formControl]="getControl('testConfig.imageUrl')"
+                required
+              />
+              <mat-hint>The URL to a docker image</mat-hint>
+              <mat-error
+                *ngIf="getControl('testConfig.imageUrl').hasError('required')"
+                >You must enter a value</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <button mat-raised-button matStepperNext color="primary">Next</button>
         </div>
-        <div *ngIf="getControl('testConfig.testMode').value === '1'">
-          <mat-form-field appearance="outline">
-            <mat-label>Enter the amount of cores</mat-label>
-            <input
-              type="number"
-              maxlength="2"
-              matInput
-              [formControl]="getControl('testConfig.coreCount')"
-              required
-            />
-            <mat-hint>The amount of cores that should be utilized</mat-hint>
-            <mat-error
-              *ngIf="getControl('testConfig.coreCount').hasError('required')"
-              >You must enter a value</mat-error
-            >
-          </mat-form-field>
-
+        <div
+          class="col-sm info"
+          *ngIf="getControl('testConfig.testMode').value === '0'"
+        >
+          <div class="column align-items-center">
+            <h2>Illustration of example parameters for the selected test mode:</h2>
+            <img class="img" src="assets/DiagramTimeSlices1.png" />
+          </div>
         </div>
-        <div *ngIf="getControl('testConfig.testMode').value === '2'">
-          <mat-form-field appearance="outline">
-            <mat-label>Enter the url of a docker image</mat-label>
-            <input
-              matInput
-              [formControl]="getControl('testConfig.imageUrl')"
-              required
-            />
-            <mat-hint>The URL to a docker image</mat-hint>
-            <mat-error
-              *ngIf="getControl('testConfig.imageUrl').hasError('required')"
-              >You must enter a value</mat-error
-            >
-          </mat-form-field>
-        </div>
-        <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
     </mat-step>
     <mat-step [stepControl]="testJobForm">
@@ -144,19 +157,23 @@
             >You must enter a value</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Enter the VMSize</mat-label>
-          <input
-            matInput
-            [formControl]="getControl('cloudConfig.0.vmSize')"
-            required
-          />
-          <mat-hint>The VMSize of the cluster nodes</mat-hint>
-          <mat-error
-            *ngIf="getControl('cloudConfig.0.vmSize').hasError('required')"
-            >You must enter a value</mat-error
-          >
-        </mat-form-field>
+        <div class="vmSize">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter the VMSize</mat-label>
+            <input
+              matInput
+              [formControl]="getControl('cloudConfig.0.vmSize')"
+              required
+            />
+            <mat-hint>The VMSize of the cluster nodes</mat-hint>
+            <mat-error
+              *ngIf="getControl('cloudConfig.0.vmSize').hasError('required')"
+              >You must enter a value</mat-error
+            >
+          </mat-form-field>
+          <a target="_blank" href="https://docs.microsoft.com/de-de/azure/virtual-machines/sizes">see Azure VM Sizes</a>
+        </div>
+
         <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
     </mat-step>
@@ -170,7 +187,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Enter the cost allocation tag key:</mat-label>
           <input matInput [formControl]="getControl('cloudConfig.1.tagName')" />
-          <mat-hint>used for tagging costs for this testrun</mat-hint>
+          <mat-hint>used for tagging costs for this test run</mat-hint>
         </mat-form-field>
         <div class="vmSize">
         <mat-form-field appearance="outline">
@@ -181,7 +198,7 @@
             required
           />
         </mat-form-field>
-        <a target="__blank" href="https://aws.amazon.com/de/ec2/pricing/on-demand/">see AWS VM Sizes</a>
+        <a target="_blank" href="https://aws.amazon.com/de/ec2/pricing/on-demand/">see AWS VM Sizes</a>
         </div>
         <mat-form-field appearance="outline">
           <mat-label>Disk size:</mat-label>
@@ -204,4 +221,4 @@
       </div>
     </mat-step>
   </mat-horizontal-stepper>
-  </div>
+</div>

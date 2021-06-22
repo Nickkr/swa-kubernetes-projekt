@@ -68,10 +68,10 @@
                       <span>Status:</span>
                       <mat-icon
                         [class.status-error]="
-                          element.status === TestJobStatus.ERROR
+                          config.status === TestJobStatus.ERROR
                         "
                         [class.status-finished]="
-                          element.status === TestJobStatus.FINISHED
+                          config.status === TestJobStatus.FINISHED
                         "
                       >
                         {{
@@ -93,6 +93,7 @@
                     <button
                       [disabled]="config.status !== TestJobStatus.RUNNING"
                       mat-stroked-button
+                      class="undeployButton"
                       (click)="onUndeploy(config.provider, element._id, $event)"
                     >
                     undeploy
@@ -141,11 +142,6 @@
           <button
             mat-stroked-button
             color="warn"
-            *ngIf="
-              element.status === testJobStatus.FINISHED ||
-              (element.status === testJobStatus.WAITING_FOR_COST ||
-                element.status === testJobStatus.ERROR)
-            "
             (click)="onDelete(element._id, $event)"
           >
             delete

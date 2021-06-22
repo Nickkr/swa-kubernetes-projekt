@@ -1,18 +1,25 @@
 .formContainer {
     padding-top: 2rem;
 
-    .row {
+    .info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .formRow {
       display: flex;
     }
 
     .column {
       display: flex;
       flex-direction: column;
+      flex-grow: 1;
     }
 
     .stepperContentContainer {
       border: 2px solid #212529;
       border-radius: 10px;
+      display: flex;
       padding: 1rem
     }
 
@@ -46,4 +53,9 @@
     a {
       align-self: center;
     }
+  }
+  .img {
+    height: 380px;
+    width: 650px;
+    object-fit: scale-down;
   }

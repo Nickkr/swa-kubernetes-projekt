@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, timer } from 'rxjs';
+import { merge, Observable, Subject, timer } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { TestJob, TestModeEnum } from './models/TestJob.interface';
 import { TestJobStatus } from './models/TestJobStatus.enum';
@@ -10,15 +10,17 @@ import { TestJobStatus } from './models/TestJobStatus.enum';
 })
 export class TestsService {
 
-  private tests$: Subject<TestJob[]> = new Subject();
+  public tests$: Subject<TestJob[]> = new Subject();
 
   constructor(private http: HttpClient) {
   }
 
+  public pollTests() {
+    return merge(timer(1, 7000).pipe(switchMap(() => this.getTests())), this.tests$);
+  }
+
   public getTests(): Observable<TestJob[]> {
-    return this.http.get<TestJob[]>('http://localhost:3000/tests').pipe(tap((job) => {
-      this.tests$.next(job);
-    }));
+    return this.http.get<TestJob[]>('http://localhost:3000/tests');
   }
 
   public startTestRun(newTestJob: any): Observable<any> {
@@ -26,7 +28,7 @@ export class TestsService {
   }
 
   public deleteTest(id: string) {
-    return this.http.delete('http://localhost:3000/tests/' + id);
+    return this.http.delete('http://localhost:3000/tests/' + id).pipe(switchMap(() => this.getTests().pipe(tap((jobs) => this.tests$.next(jobs)))));
   }
 
   public undeployTest(provider: string, id: string) {
@@ -34,7 +36,7 @@ export class TestsService {
       params: {
         provider
       }
-    })
+    }).pipe(switchMap(() => this.getTests().pipe(tap((jobs) => this.tests$.next(jobs)))))
   }
 
   public getTestModeText(mode: TestModeEnum): string {
