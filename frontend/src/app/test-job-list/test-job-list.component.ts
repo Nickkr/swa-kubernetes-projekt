@@ -1,15 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { DatePipe, formatDate } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { TestJob } from '../models/TestJob.interface';
+import { CloudConfig, TestJob } from '../models/TestJob.interface';
 import { TestJobStatus } from '../models/TestJobStatus.enum';
 import { TestsService } from '../tests.service';
 
 @Component({
   selector: 'app-test-job-list',
   templateUrl: './test-job-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./test-job-list.component.scss'],
   animations: [
     trigger('detailExpand', [
@@ -25,11 +27,12 @@ export class TestJobListComponent implements OnInit {
   testJobStatus: typeof TestJobStatus = TestJobStatus;
   expandedJob: TestJob | null = null;
 
-  constructor(public testsService: TestsService, private router: Router) {}
+  constructor(public testsService: TestsService, private router: Router, private changeRef: ChangeDetectorRef, private datepipe: DatePipe) {}
 
   ngOnInit(): void {
     timer(1, 7000).pipe(switchMap(() => this.testsService.getTests())).subscribe(tests => {
       this.dataSource = tests;
+      this.changeRef.detectChanges();
     })
 
    // this.testsService.getTests().subscribe();
@@ -39,8 +42,14 @@ export class TestJobListComponent implements OnInit {
     return TestJobStatus;
   }
 
-  getDuration(testJob: TestJob) {
-    return Date.now() - new Date(testJob.time).getTime();
+  getDuration(cloudConfig: CloudConfig) {
+    if(!cloudConfig.startDeploy) {
+      return "-";
+    }
+    if(cloudConfig.startDeploy != null && cloudConfig.endDeploy == null) {
+      return this.datepipe.transform(Date.now() - cloudConfig.startDeploy, 'HH:mm:ss','+0000');
+    }
+    return this.datepipe.transform(cloudConfig.endDeploy - cloudConfig.startDeploy, 'HH:mm:ss','+0000');
   }
 
   onRowClicked(id: string) {

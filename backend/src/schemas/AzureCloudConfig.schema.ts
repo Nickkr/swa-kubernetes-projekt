@@ -14,11 +14,15 @@ export class AzureCloudConfig {
     resourceGroupName: string;
     clusterName: string;
     nodeCount: number;
+    _id:string;
 
     @Prop()
     subscriptionId: string;
     @Prop({default: 'germanywestcentral'})
     location: string;
+
+    startDeploy:number;
+    endDeploy:number;
 }
 
 export const AzureCloudConfigSchema = SchemaFactory.createForClass(AzureCloudConfig);

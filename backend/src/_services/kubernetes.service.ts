@@ -61,7 +61,7 @@ export class KubernetesService {
    * @returns {V1Pod} The deployment configurtation.
    */
   private getDeploymentConfig(testConfig: TestConfig): V1Pod {
-    const imgUrl = testConfig.imageUrl ? testConfig.imageUrl : 'fabianburth/python-configurable:v2.1.1';
+    const imgUrl = testConfig.imageUrl ? testConfig.imageUrl : 'fabianburth/python-configurable:v3.0.1';
     return {
       apiVersion: 'v1',
       kind: 'Pod',

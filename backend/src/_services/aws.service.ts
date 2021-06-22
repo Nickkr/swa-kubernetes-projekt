@@ -48,7 +48,7 @@ import {  ResourceGroupsClient, CreateGroupCommand, DeleteGroupCommand } from "@
 import { STSClient, GetCallerIdentityCommand, AssumeRoleWithSAMLCommand } from "@aws-sdk/client-sts";
 
 
-import { CostExplorerClient, GetCostAndUsageCommand } from "@aws-sdk/client-cost-explorer";
+import { CostExplorerClient, DataUnavailableException, GetCostAndUsageCommand, GetCostAndUsageCommandOutput, Granularity } from "@aws-sdk/client-cost-explorer";
 import * as path from 'path';
 import * as fs from 'fs';
 import { KubeConfig } from '@kubernetes/client-node';
@@ -57,7 +57,6 @@ var exec  = util.promisify(require('child_process').exec);
 
 @Injectable()
 export class AwsService implements CloudPlatformDeploymentService {
-    
     /**
    * generates the name out of testId as the prefix and the given name
    * @param testId is the test id given as string
@@ -84,11 +83,13 @@ export class AwsService implements CloudPlatformDeploymentService {
      */
     async createCluster(config:AwsCloudConfig) :Promise<string> {
         const createClusterCommand = `eksctl create cluster --name ${this.generateName(config._id, 'Cluster')} --region ${config.location}` +
-        ` --with-oidc --managed` +
+        ` --with-oidc --managed --node-volume-size ${config.diskSize}`+
         ` -p ${config.profile} --kubeconfig "${path.join(__dirname,'aws/.kube/config')}" --nodes 1 --instance-types=${config.instanceType}` +
         ` --tags swatest=${this.generateName(config._id, 'Cluster')}`;
         this.logger.log(createClusterCommand);
-        await exec(createClusterCommand);
+        const { stdout, stderr } = await exec(createClusterCommand);
+        this.logger.log(stdout);
+        this.logger.error(stderr);
 
        // Fetch KubernetesConfig
         this.logger.log('---------- Getting Kube Credentials ------------');
@@ -100,7 +101,9 @@ export class AwsService implements CloudPlatformDeploymentService {
 
     async removeCluster(config:AwsCloudConfig) {
        try {
-            await exec(`eksctl delete cluster --name ${this.generateName(config._id, 'Cluster')} --region ${config.location} -p ${config.profile}`);
+            const {stdout, stderr } = await exec(`eksctl delete cluster --name ${this.generateName(config._id, 'Cluster')} --region ${config.location} -p ${config.profile}`);
+            this.logger.log(stdout);
+            this.logger.error(stderr);
         } catch (error) {
             this.logger.error('!! Error when removing cluster !!');
             this.logger.error(error);
@@ -114,49 +117,50 @@ export class AwsService implements CloudPlatformDeploymentService {
             region: config.location,
             tls:true
         });
-        const accountNumber = await this.getAccountNumber(config);
+        const start = new Date(config.startDeploy);
+        var end = new Date(config.endDeploy);
+        end.setDate(end.getDate() + 1 );
+        const startDate = start.toISOString().split("T")[0];
+        const endDate = end.toISOString().split("T")[0];
         var command = new GetCostAndUsageCommand({
             Filter: {
                 "And": [
                     {
-                        "Dimensions" :
-                        {
+                        "Dimensions" : {
                             "Key": "REGION",
                             "Values": [ config.location ]
                         }
                     },
                     {
-                        "Dimensions": {
-                            "Key" : "LINKED_ACCOUNT",
-                            "Values": [ accountNumber ]
+                        "Tags": {
+                            "Key": "swatest",
+                            "Values": [ `${this.generateName(config._id,'Cluster')}` ]
                         }
-                    },
-                    {
-                    "Tags":
-                        {
-                            "Key": "Name",
-                            "Values": [`eksctl-${this.generateName(config._id,'Cluster')}-cluster/VPC`]
-                        },
                     }
                 ]
             },
-           Granularity: "DAILY",
-           GroupBy: [
-                {
-                    "Key": config.vpcName,
-                    "Type": "TAG"
-                }
-           ],
-           Metrics: [ "AmortizedCost", "BlendedCost", "NetAmortizedCost", "NetUnblendedCost", "NormalizedUsageAmount", "UnblendedCost", "UsageQuantity" ],
+           Granularity:"MONTHLY",
+           Metrics: [ "UnblendedCost" ],
            TimePeriod: {
-              Start: "2021-05-01T00:00:00+00:00",
-              End: "2021-05-31T23:59:59+00:00"
+               Start: startDate,
+               End: endDate
            }
         });
 
-        var response = await this.sendCommand(costExplorerClient, command);
-        this.logger.log(response.toString());
-        return response.ResultsByTime["Total"]["Amount"];
+        try {
+            this.logger.log(JSON.stringify(command));
+            var response = await costExplorerClient.send(command) as GetCostAndUsageCommandOutput;
+            this.logger.log(JSON.stringify(response));
+            this.logger.log("AWS Costs: " + response.ResultsByTime[0].Total.UnblendedCost.Amount);
+            var costs = Number(response.ResultsByTime[0].Total.UnblendedCost.Amount);
+            if (costs && costs == 0) {
+                return null;
+            }
+            return costs;
+        } catch (error) {
+            this.logger.log(error);
+            return null;
+        }
     }
 
     public async getAvailableInstanceTypes(config:AwsCloudConfig,testConfig:TestConfig) {
@@ -168,7 +172,7 @@ export class AwsService implements CloudPlatformDeploymentService {
                 },
                 {
                     Name: "supported-usage-class",
-                    Values: [config.capacityType.toLowerCase()]
+                    Values: [ "on_demand" ]
                 }
 
             ]

@@ -29,6 +29,8 @@ export interface CloudConfig {
   status: TestJobStatus
   resourceGroupName: string;
   testResult: number;
+  startDeploy: number;
+  endDeploy: number;
 }
 
 export interface TestConfig {

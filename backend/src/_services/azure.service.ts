@@ -88,6 +88,11 @@ export class AzureService {
   public async getCost(config: AzureCloudConfig): Promise<number> {
     const creds = await this.login();
     const token = await creds.getToken();
+    const start = new Date(config.startDeploy);
+    var end = new Date(config.endDeploy);
+    end.setDate(end.getDate() + 1 );
+    const startDate = start.toISOString();
+    const endDate = end.toISOString();
     return new Promise((resolve, reject) => {
       this.http
         .post(
@@ -126,8 +131,8 @@ export class AzureService {
             },
             timeframe: 'Custom',
             timePeriod: {
-              from: '2021-06-01T00:00:00+00:00',
-              to: '2021-06-30T23:59:59+00:00'
+              from: startDate,
+              to: endDate
             }
           },
           {

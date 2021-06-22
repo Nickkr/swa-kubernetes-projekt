@@ -86,15 +86,16 @@
                     </div>
                   </td>
                   <td class="cloud_config_duration">
-                    Duration:
+                    Duration: {{ getDuration(config) }}
                   </td>
                   <td>
                     Action:
                     <button
-                      mat-icon-button
+                      [disabled]="config.status !== TestJobStatus.RUNNING"
+                      mat-stroked-button
                       (click)="onUndeploy(config.provider, element._id, $event)"
                     >
-                      <mat-icon>cloud_download</mat-icon>
+                    undeploy
                     </button>
                   </td>
                 </tr>

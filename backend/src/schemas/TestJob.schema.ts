@@ -22,7 +22,7 @@ export class TestJob {
     status: TestJobStatus;
     @Prop({default: ''})
     statusText: string; 
-    @Prop({type: Date, default: Date.now()})
+    @Prop({type: Date, default: Date.now })
     time: Date;
 }
 

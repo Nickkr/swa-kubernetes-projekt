@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,8 @@ import { TestJobDetailComponent } from './test-job-detail/test-job-detail.compon
 import { TestJobListComponent } from './test-job-list/test-job-list.component';
 import { TestJobCreateComponent } from './test-job-create/test-job-create.component';
 import { ChartsModule } from 'ng2-charts';
+import locale from '@angular/common/locales/de';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, TestJobDetailComponent, TestJobListComponent, TestJobCreateComponent],
@@ -41,7 +43,9 @@ import { ChartsModule } from 'ng2-charts';
     MatSelectModule,
     MatStepperModule
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
