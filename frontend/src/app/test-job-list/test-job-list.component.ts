@@ -77,7 +77,7 @@ export class TestJobListComponent implements OnInit {
    * @param {string} id The id of a testJob.
    */
   onRowClicked(row: TestJob) {
-    this.expandedJob = this.expandedJob ? null : row;
+    this.expandedJob = this.expandedJob === row ? null : row
     this.expandedJobLogs = [];
   }
 
