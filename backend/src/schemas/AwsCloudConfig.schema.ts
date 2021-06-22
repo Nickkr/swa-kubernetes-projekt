@@ -11,7 +11,6 @@ export class AwsCloudConfig {
     provider: string;
     status: TestJobStatus
     testResult: number;
-    nodeCount:number;
     _id:string;
 
     @Prop({ default: 'eu-central-1' })
@@ -22,9 +21,12 @@ export class AwsCloudConfig {
     diskSize:number;
     @Prop({default: 't3.medium',type:String})
     instanceType:string;
+    @Prop({default: 'swatest', type:String})
+    tagName:string;
 
     startDeploy:number;
     endDeploy:number;
+    
 }
 
 export const AwsCloudConfigSchema = SchemaFactory.createForClass(AwsCloudConfig);

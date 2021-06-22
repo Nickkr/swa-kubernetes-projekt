@@ -123,20 +123,6 @@
             >
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline">
-          <mat-label>Enter the number of nodes to create</mat-label>
-          <input
-            type="number"
-            matInput
-            [formControl]="getControl('testConfig.nodeCount')"
-            required
-          />
-          <mat-hint>The number of nodes for the kubernets cluster</mat-hint>
-          <mat-error
-            *ngIf="getControl('testConfig.nodeCount').hasError('required')"
-            >You must enter a value</mat-error
-          >
-        </mat-form-field>
         <button mat-raised-button matStepperNext color="primary">Next</button>
       </div>
     </mat-step>
@@ -181,13 +167,27 @@
           <mat-label>Enter the profile name:</mat-label>
           <input matInput [formControl]="getControl('cloudConfig.1.profile')" />
         </mat-form-field>
-
+        <mat-form-field appearance="outline">
+          <mat-label>Enter the cost allocation tag key:</mat-label>
+          <input matInput [formControl]="getControl('cloudConfig.1.tagName')" />
+          <mat-hint>used for tagging costs for this testrun</mat-hint>
+        </mat-form-field>
+        <div class="vmSize">
         <mat-form-field appearance="outline">
           <mat-label>Choose the VM Size</mat-label>
           <input
             matInput
             [formControl]="getControl('cloudConfig.1.instanceType')"
             required
+          />
+        </mat-form-field>
+        <a target="__blank" href="https://aws.amazon.com/de/ec2/pricing/on-demand/">see AWS VM Sizes</a>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Disk size:</mat-label>
+          <input
+            matInput
+            [formControl]="getControl('cloudConfig.1.diskSize')"
           />
         </mat-form-field>
       </div>

@@ -31,34 +31,36 @@
         {{ testJob.testConfig.coreCount ? testJob.testConfig.coreCount : '-' }}
       </p>
     </div>
-    <!-- CPU Load factor -->
-    <div class="propertyContainer">
-      <p id="name">CPU load factor:</p>
-      <p id="value">
-        {{
-          testJob.testConfig.cpuLoadFactor
-            ? testJob.testConfig.cpuLoadFactor
-            : '-'
-        }}
-      </p>
-    </div>
-    <!-- Interval  -->
-    <div class="propertyContainer">
-      <p id="name">Interval:</p>
-      <p id="value">
-        {{ testJob.testConfig.frequency ? testJob.testConfig.frequency : '-' }}
-      </p>
-    </div>
-    <!-- duration  -->
-    <div class="propertyContainer">
-      <p id="name">Test duration:</p>
-      <p id="value">
-        {{
-          testJob.testConfig.testDuration
-            ? testJob.testConfig.testDuration
-            : '-'
-        }}
-      </p>
+    <div *ngIf="testJob.testConfig.testMode === '0'">
+      <!-- CPU Load factor -->
+      <div class="propertyContainer">
+        <p id="name">CPU load factor:</p>
+        <p id="value">
+          {{
+            testJob.testConfig.cpuLoadFactor
+              ? testJob.testConfig.cpuLoadFactor
+              : '-'
+          }}
+        </p>
+      </div>
+      <!-- Interval  -->
+      <div class="propertyContainer">
+        <p id="name">Interval:</p>
+        <p id="value">
+          {{ testJob.testConfig.frequency ? testJob.testConfig.frequency : '-' }}
+        </p>
+      </div>
+      <!-- duration  -->
+      <div class="propertyContainer">
+        <p id="name">Test duration:</p>
+        <p id="value">
+          {{
+            testJob.testConfig.testDuration
+              ? testJob.testConfig.testDuration
+              : '-'
+          }}
+        </p>
+      </div>
     </div>
     <!-- image url -->
     <div class="propertyContainer" *ngIf="testJob.testConfig.imageUrl">
@@ -123,6 +125,10 @@
     <div class="propertyContainer">
       <p id="name">Profile:</p>
       <p id="value">{{ getAwsConfig().profile }}</p>
+    </div>
+    <div class="propertyContainer">
+      <p id="name">Cluster name:</p>
+      <p id="value">{{ generateName(getAwsConfig()._id) }}</p>
     </div>
     <!-- disk size -->
     <div class="propertyContainer">

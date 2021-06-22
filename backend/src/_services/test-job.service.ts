@@ -26,7 +26,7 @@ export class TestJobService {
   ) { }
 
   async startTestJob(testJob: TestJobDocument) {
-    testJob.status = TestJobStatus.DEPLOYING;
+    testJob.status = TestJobStatus.RUNNING;
     
     testJob.cloudConfig.forEach( (config) => {
       config.status = TestJobStatus.DEPLOYING;
@@ -58,8 +58,6 @@ export class TestJobService {
           }
         })
     );
-    testJob.status = TestJobStatus.RUNNING;
-    await testJob.save();
   }
 
   getCloudService(provider: string): CloudPlatformDeploymentService {
@@ -72,32 +70,20 @@ export class TestJobService {
   }
 
   async undeployTestJob(testJob: TestJobDocument, provider: string) {
-    Promise.all(
-      testJob.cloudConfig.filter(config => {
-        if (provider) {
-          return config.provider === provider;
-        } else {
-          return true;
-        }
-      }).map(async (config, index) => {
-        const cloudService = this.getCloudService(config.provider);
-        config.endDeploy = Date.now();
-        testJob.status = TestJobStatus.UNDEPLOYING;
-        testJob.cloudConfig[index].status = TestJobStatus.UNDEPLOYING;
-        await testJob.save();
-        await cloudService.removeCluster(config);
-        testJob.status = TestJobStatus.WAITING_FOR_COST;
-        testJob.cloudConfig[index].status = TestJobStatus.WAITING_FOR_COST;
-        await testJob.save();
-      })
-    );
+    const index = testJob.cloudConfig.findIndex(config => config.provider == provider);
+    const cloudService = this.getCloudService(provider);
+    testJob.cloudConfig[index].endDeploy = Date.now();
+    testJob.cloudConfig[index].status = TestJobStatus.UNDEPLOYING;
+    await testJob.save();
+    await cloudService.removeCluster(testJob.cloudConfig[index]);
+    testJob.cloudConfig[index].status = TestJobStatus.WAITING_FOR_COST;
+    await testJob.save();
   }
 
   @Cron('5 * * * * *')
   async pollCosts() {
     const jobs = await this.testJobModel
-      .find({ status: TestJobStatus.WAITING_FOR_COST })
-      .populate('cloudConfig')
+      .find({ "cloudConfig.status": TestJobStatus.WAITING_FOR_COST  })
       .exec();
     if (jobs.length > 0) {
       this.logger.debug('Polling Costs...');

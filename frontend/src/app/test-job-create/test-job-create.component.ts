@@ -24,8 +24,7 @@ export class TestJobCreateComponent implements OnInit {
         cpuLoadFactor: '0.5',
         frequency: '10',
         testDuration: '300',
-        imageUrl: '',
-        nodeCount: 1
+        imageUrl: ''
       }),
       cloudConfig: this.fb.array([
         this.fb.group({
@@ -36,7 +35,9 @@ export class TestJobCreateComponent implements OnInit {
         this.fb.group({
           provider: 'aws',
           profile:'',
-          instanceType: 't3.medium'
+          tagName: 'swatest',
+          instanceType: 't3.medium',
+          diskSize: '80'
         })
       ])
     });

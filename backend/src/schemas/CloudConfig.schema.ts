@@ -21,8 +21,6 @@ export class CloudConfig {
   resourceGroupName: string;
   @Prop({ default: 'TestCluster' })
   clusterName: string;
-  @Prop({ default: 1, type: Number })
-  nodeCount: number;
   @Prop({default: null})
   startDeploy:number;
   @Prop({default: null})

@@ -85,7 +85,7 @@ export class AwsService implements CloudPlatformDeploymentService {
         const createClusterCommand = `eksctl create cluster --name ${this.generateName(config._id, 'Cluster')} --region ${config.location}` +
         ` --with-oidc --managed --node-volume-size ${config.diskSize}`+
         ` -p ${config.profile} --kubeconfig "${path.join(__dirname,'aws/.kube/config')}" --nodes 1 --instance-types=${config.instanceType}` +
-        ` --tags swatest=${this.generateName(config._id, 'Cluster')}`;
+        ` --tags ${config.tagName}=${this.generateName(config._id, 'Cluster')}`;
         this.logger.log(createClusterCommand);
         const { stdout, stderr } = await exec(createClusterCommand);
         this.logger.log(stdout);
@@ -133,7 +133,7 @@ export class AwsService implements CloudPlatformDeploymentService {
                     },
                     {
                         "Tags": {
-                            "Key": "swatest",
+                            "Key": config.tagName,
                             "Values": [ `${this.generateName(config._id,'Cluster')}` ]
                         }
                     }
@@ -151,8 +151,22 @@ export class AwsService implements CloudPlatformDeploymentService {
             this.logger.log(JSON.stringify(command));
             var response = await costExplorerClient.send(command) as GetCostAndUsageCommandOutput;
             this.logger.log(JSON.stringify(response));
-            this.logger.log("AWS Costs: " + response.ResultsByTime[0].Total.UnblendedCost.Amount);
-            var costs = Number(response.ResultsByTime[0].Total.UnblendedCost.Amount);
+            var sum = 0;
+            // costs are returned in a array
+            // sum over the array
+            response.ResultsByTime.forEach( result => {
+                sum += Number(result.Total.UnblendedCost.Amount);
+            });
+            // need to use pagination if response contains a value in NextPageToken
+            while(response.NextPageToken !== undefined) {
+                command["NextPageToken"] = response.NextPageToken;
+                response = await costExplorerClient.send(command) as GetCostAndUsageCommandOutput;
+                response.ResultsByTime.forEach( result => {
+                    sum += Number(result.Total.UnblendedCost.Amount);
+                });
+            }
+            this.logger.log("AWS Costs: " + sum);
+            var costs = sum;
             if (costs && costs == 0) {
                 return null;
             }

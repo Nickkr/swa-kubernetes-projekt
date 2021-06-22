@@ -13,7 +13,6 @@ export class AzureCloudConfig {
     testResult: number;
     resourceGroupName: string;
     clusterName: string;
-    nodeCount: number;
     _id:string;
 
     @Prop()

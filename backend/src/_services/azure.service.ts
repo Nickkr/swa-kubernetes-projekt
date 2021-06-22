@@ -64,7 +64,7 @@ export class AzureService {
           {
             name: 'testpro',
             mode: 'System',
-            count: config.nodeCount,
+            count: 1,
             vmSize: 'Standard_DS2_v2'
           }
         ],

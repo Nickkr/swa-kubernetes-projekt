@@ -68,4 +68,14 @@ export class TestJobDetailComponent implements OnInit {
   getAwsConfig(): AwsCloudConfig {
     return this.testJob.cloudConfig.find((config) => config.provider === 'aws') as AwsCloudConfig;
   }
+
+   /**
+   * generates the name out of testId as the prefix and the given name
+   * @param testId is the test id given as string
+   * @param name is the name appended after the prefix
+   * @returns 'Test-<testId>-<name>'
+   */
+    generateName(testId:string, name:string='Cluster'):string {
+      return `Test-${testId}-${name}`;
+  }
 }
