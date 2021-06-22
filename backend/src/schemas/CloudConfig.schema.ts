@@ -25,6 +25,8 @@ export class CloudConfig {
   startDeploy:number;
   @Prop({default: null})
   endDeploy:number;
+  @Prop()
+  kubernetesConfig: string
 }
 
 export const CloudConfigSchema = SchemaFactory.createForClass(CloudConfig);

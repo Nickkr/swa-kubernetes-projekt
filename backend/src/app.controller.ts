@@ -4,11 +4,12 @@ import { Model } from 'mongoose';
 import { TestJob, TestJobDocument } from './schemas/TestJob.schema';
 import { AwsService } from './_services/aws.service';
 import { AzureService } from './_services/azure.service';
+import { KubernetesService } from './_services/kubernetes.service';
 import { TestJobService } from './_services/test-job.service';
 
 @Controller()
 export class AppController {
-  constructor(@InjectModel(TestJob.name) private testJobModel: Model<TestJobDocument>, private testJobService: TestJobService, private azureService: AzureService) {}
+  constructor(@InjectModel(TestJob.name) private testJobModel: Model<TestJobDocument>, private testJobService: TestJobService, private azureService: AzureService, private kubernetes: KubernetesService) {}
   
   @Get('/tests')
   public async getAllTestJobs() {
@@ -35,7 +36,7 @@ export class AppController {
   @Post('/tests/:id/undeploy')
   public async undeploy(@Query('provider') provider, @Param('id') id) {
     const job = await this.testJobModel.findById(id).exec();
-    await this.testJobService.undeployTestJob(job, provider);
+    this.testJobService.undeployTestJob(job, provider);
   }
 
   @Post('/tests')
@@ -46,8 +47,9 @@ export class AppController {
     return job;
   }
 
-  @Get('/tests/azure/vmSizes') 
-  public async getVMSizes() {
-    return this.azureService.getVmSizes();
+  @Get('/tests/:id/logs') 
+  public async getContainerLogs(@Param('id') id, @Query('provider') provider) {
+    const job = await this.testJobModel.findById(id).exec();
+    return this.kubernetes.getLogs(job, provider);
   }
 }

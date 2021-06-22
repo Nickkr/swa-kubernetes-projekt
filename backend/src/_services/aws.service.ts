@@ -2,56 +2,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CloudPlatformDeploymentService } from 'src/models/CloudPlatformDeploymentService.interface';
 import { AwsCloudConfig } from 'src/schemas/AwsCloudConfig.schema';
 import { TestConfig } from 'src/schemas/TestConfig.schema';
-
-import { randomUUID } from 'crypto';
-
 // EKS
-import {
-    EKSClient,
-    AssociateEncryptionConfigCommand,
-    CreateClusterCommand,
-    DeleteClusterCommand,
-    CreateNodegroupCommand,
-    DeleteNodegroupCommand,
-    DescribeClusterCommand,
-    DescribeClusterCommandOutput,
-    CreateClusterCommandOutput,
-    DeleteNodegroupCommandOutput,
-    DeleteClusterCommandOutput,
-    waitUntilClusterActive,
-    CreateNodegroupCommandOutput,
-    waitUntilNodegroupActive,
-    waitUntilNodegroupDeleted,
-    waitUntilClusterDeleted,
-    Nodegroup,
-    Cluster,
-    UpdateAddonCommand,
-    DescribeNodegroupCommand,
-    CreateAddonCommand,
-    waitUntilAddonActive
-} from "@aws-sdk/client-eks";
 import { defaultProvider } from "@aws-sdk/credential-provider-node";
 // EC2
 import {
-    EC2Client,
-    DescribeSubnetsCommand,
-    DescribeVpcsCommand,
-    DescribeSecurityGroupsCommand,
     DescribeInstanceTypesCommand,
-    DescribeVpcsCommandOutput,
-    DescribeSecurityGroupsCommandOutput,
-    DescribeSubnetsCommandOutput,
 } from "@aws-sdk/client-ec2";
-
-import {  ResourceGroupsClient, CreateGroupCommand, DeleteGroupCommand } from "@aws-sdk/client-resource-groups"
-
-import { STSClient, GetCallerIdentityCommand, AssumeRoleWithSAMLCommand } from "@aws-sdk/client-sts";
+import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 
 
 import { CostExplorerClient, DataUnavailableException, GetCostAndUsageCommand, GetCostAndUsageCommandOutput, Granularity } from "@aws-sdk/client-cost-explorer";
 import * as path from 'path';
 import * as fs from 'fs';
-import { KubeConfig } from '@kubernetes/client-node';
 const util = require('util');
 var exec  = util.promisify(require('child_process').exec);
 

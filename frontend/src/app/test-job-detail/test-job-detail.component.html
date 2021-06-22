@@ -35,7 +35,7 @@
         </div>
         <div class="col">
           <!-- Core count -->
-          <div class="propertyContainer">
+          <div class="propertyContainer" *ngIf="!testJob.testConfig.imageUrl">
             <p id="name">Core count:</p>
             <p id="value">
               {{ testJob.testConfig.coreCount ? testJob.testConfig.coreCount : '-' }}
@@ -57,7 +57,7 @@
             <div class="propertyContainer">
               <p id="name">Interval:</p>
               <p id="value">
-                {{ testJob.testConfig.frequency ? testJob.testConfig.frequency : '-' }}
+                {{ testJob.testConfig.frequency ? testJob.testConfig.frequency + ' seconds': '-' }}
               </p>
             </div>
             <!-- duration  -->
@@ -66,7 +66,7 @@
               <p id="value">
                 {{
                 testJob.testConfig.testDuration
-                ? testJob.testConfig.testDuration
+                ? testJob.testConfig.testDuration + ' seconds'
                 : '-'
                 }}
               </p>

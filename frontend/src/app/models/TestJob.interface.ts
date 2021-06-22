@@ -31,6 +31,7 @@ export interface CloudConfig {
   testResult: number;
   startDeploy: number;
   endDeploy: number;
+  logs: string,
 }
 
 export interface TestConfig {

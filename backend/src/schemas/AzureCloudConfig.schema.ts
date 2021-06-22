@@ -14,6 +14,7 @@ export class AzureCloudConfig {
     resourceGroupName: string;
     clusterName: string;
     _id:string;
+    kubernetesConfig: string
 
     @Prop()
     subscriptionId: string;

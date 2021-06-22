@@ -12,6 +12,7 @@ export class AwsCloudConfig {
     status: TestJobStatus
     testResult: number;
     _id:string;
+    kubernetesConfig: string
 
     @Prop({ default: 'eu-central-1' })
     location: string;

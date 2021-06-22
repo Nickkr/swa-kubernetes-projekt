@@ -39,6 +39,13 @@ export class TestsService {
     }).pipe(switchMap(() => this.getTests().pipe(tap((jobs) => this.tests$.next(jobs)))))
   }
 
+  public getContainerLogs(id: string, provider: string): Observable<{log: string}> {
+    return this.http.get<{log: string}>(`http://localhost:3000/tests/${id}/logs`, {
+      params: {
+        provider
+      }
+    });
+  }
   public getTestModeText(mode: TestModeEnum): string {
     switch(mode) {
       case TestModeEnum.DEFINED_LOAD:

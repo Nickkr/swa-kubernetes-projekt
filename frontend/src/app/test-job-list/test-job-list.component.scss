@@ -29,7 +29,7 @@
   margin-right: 0.5rem;
 }
 
-.undeployButton {
+.actionButton {
   height: 30px;
   line-height: 30px;
   margin-left: 10px;
@@ -65,17 +65,16 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .example-element-detail {
-  overflow: hidden;
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
+.logs {
+  padding-left: 66px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
 }
 
 .example-element-symbol {

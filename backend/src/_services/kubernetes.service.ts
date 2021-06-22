@@ -5,13 +5,31 @@ import {
   V1Pod
 } from '@kubernetes/client-node';
 import { Injectable, Logger } from '@nestjs/common';
+import { TestJobStatus } from 'src/models/TestJobStatus.enum';
 import { TestConfig } from 'src/schemas/TestConfig.schema';
+import { TestJob } from 'src/schemas/TestJob.schema';
 
 @Injectable()
 export class KubernetesService {
   private readonly logger = new Logger(KubernetesService.name);
 
   constructor() {}
+
+  public async getLogs(testJob: TestJob, provider: string) {
+    let containerLogs = {log: ''}
+    await Promise.all(testJob.cloudConfig.filter(config => config.status === TestJobStatus.RUNNING && config.kubernetesConfig && provider === config.provider).map(async (config) => {
+      try {
+        const kubeConfig = new KubeConfig();
+        kubeConfig.loadFromString(config.kubernetesConfig);
+        const core = kubeConfig.makeApiClient(CoreV1Api);
+        const log = await core.readNamespacedPodLog('app-demo', 'default');
+        containerLogs = {log: log.body}
+      }catch(err) {
+        this.logger.log(err);
+      }
+    }));
+    return containerLogs;
+  }
 
   /**
    * Deploys the Test-App to the Cluster specified in the config.

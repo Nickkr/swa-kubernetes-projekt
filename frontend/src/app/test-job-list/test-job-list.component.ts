@@ -24,15 +24,19 @@ export class TestJobListComponent implements OnInit {
   displayedColumns: string[] = ['expansionStatus','name', 'status', 'time', 'action'];
   dataSource: TestJob[] = [];
   testJobStatus: typeof TestJobStatus = TestJobStatus;
-  expandedJob: TestJob | null = null;
+  expandedJob: TestJob | null | undefined = null;
+  expandedJobLogs: Array<{log: string, provider: string}> = [];
+  expandedJobLogLoading: boolean = false;
 
   private poll$: Subscription | null = null;
 
-  constructor(public testsService: TestsService, private router: Router, private changeRef: ChangeDetectorRef, private datepipe: DatePipe) {}
+  constructor(public testsService: TestsService, private router: Router, private changeRef: ChangeDetectorRef, private datepipe: DatePipe) {
+  }
 
   ngOnInit(): void {
     this.poll$ = this.testsService.pollTests().subscribe((jobs) => {
       this.dataSource = jobs;
+      this.expandedJob = jobs.find((job) => job._id === this.expandedJob?._id);
       this.changeRef.detectChanges();
     });
   }
@@ -72,8 +76,41 @@ export class TestJobListComponent implements OnInit {
    *
    * @param {string} id The id of a testJob.
    */
-  onRowClicked(id: string) {
-    this.router.navigate(['testjobs', id]);
+  onRowClicked(row: TestJob) {
+    this.expandedJob = this.expandedJob ? null : row;
+    this.expandedJobLogs = [];
+  }
+
+ onDetailsClicked(id: string) {
+  this.router.navigate(['testjobs', id]);
+  }
+
+  fetchLogs(id: string, provider: string) {
+    this.expandedJobLogLoading = true;
+    this.testsService.getContainerLogs(id, provider).subscribe(resp => {
+        let log = {
+            log: resp.log.replace(/\n/g, "<br />"),
+            provider
+        } as {log: string, provider: string}
+        this.expandedJobLogs.push(log);
+        this.expandedJobLogLoading = false;
+        this.changeRef.detectChanges();
+    }, (err) => {
+      this.expandedJobLogLoading = false;
+    })
+  }
+
+  getLogs(id: string, provider: string): any  {
+    if(id === this.expandedJob?._id) {
+      const expLog = this.expandedJobLogs.find((log) => log.provider === provider);
+      if(expLog) {
+        return expLog.log;
+      } else {
+        return null;
+      }
+    } else {
+      null;
+    }
   }
 
 

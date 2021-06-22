@@ -39,6 +39,8 @@ export class TestJobService {
             this.logger.log(testJob);
             const cloudService = this.getCloudService(config.provider);
             const kubeConfig = await cloudService.createCluster(config);
+            testJob.cloudConfig[index].kubernetesConfig = kubeConfig;
+            await testJob.save();
             const kubeResponse = await this.kubernetesService.deployToCluster(
               kubeConfig,
               config,
