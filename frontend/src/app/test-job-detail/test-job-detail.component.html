@@ -154,7 +154,7 @@
       </p>
     </div>
     <!-- Error message -->
-    <div class="propertyContainer" *ngIf="getAzureConfig().errorMsg">
+    <div class="propertyContainer" *ngIf="getAwsConfig().errorMsg">
       <p id="name">Error message:</p>
       <p id="value">{{ getAwsConfig().errorMsg ? getAwsConfig().errorMsg : '-' }}</p>
     </div>
